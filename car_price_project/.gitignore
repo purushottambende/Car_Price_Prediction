@@ -1,0 +1,19 @@
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+.eggs/
+*.log
+.DS_Store
+Thumbs.db
+# For Streamlit Community Cloud deployment, models (<400 KB) and assets must be committed to GitHub
+# models/*.joblib
+# models/metadata.json
+# assets/*.png
+*.orig

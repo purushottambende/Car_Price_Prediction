@@ -1,0 +1,212 @@
+{
+  "sklearn_version": "1.9.1",
+  "current_year": 2024,
+  "feature_list": [
+    "Car_Name",
+    "Year",
+    "Present_Price",
+    "Kms_Driven",
+    "Fuel_Type",
+    "Seller_Type",
+    "Transmission",
+    "Owner"
+  ],
+  "categorical_options": {
+    "Brand": [
+      "Activa",
+      "Alto",
+      "Amaze",
+      "Bajaj",
+      "Baleno",
+      "Brio",
+      "Ciaz",
+      "City",
+      "Corolla",
+      "Creta",
+      "Dzire",
+      "Elantra",
+      "Eon",
+      "Ertiga",
+      "Etios",
+      "Fortuner",
+      "Grand",
+      "Hero",
+      "Honda",
+      "Hyosung",
+      "I10",
+      "I20",
+      "Ignis",
+      "Innova",
+      "Jazz",
+      "Ktm",
+      "Mahindra",
+      "Omni",
+      "Ritz",
+      "Royal",
+      "S",
+      "Suzuki",
+      "Swift",
+      "Sx4",
+      "Tvs",
+      "Um",
+      "Verna",
+      "Vitara",
+      "Wagon",
+      "Xcent",
+      "Yamaha"
+    ],
+    "Fuel_Type": [
+      "CNG",
+      "Diesel",
+      "Petrol"
+    ],
+    "Seller_Type": [
+      "Dealer",
+      "Individual"
+    ],
+    "Transmission": [
+      "Automatic",
+      "Manual"
+    ],
+    "Owner": [
+      0,
+      1
+    ]
+  },
+  "numeric_ranges": {
+    "Year": {
+      "min": 2003,
+      "max": 2018,
+      "default": 2014
+    },
+    "Present_Price": {
+      "min": 0.32,
+      "max": 20.45,
+      "default": 5.835
+    },
+    "Kms_Driven": {
+      "min": 500.0,
+      "max": 92233.0,
+      "default": 31213.5
+    },
+    "Owner": {
+      "min": 0,
+      "max": 1,
+      "default": 0
+    }
+  },
+  "category_thresholds": {
+    "Low_to_Medium_lakhs": 1.23,
+    "Medium_to_High_lakhs": 4.92
+  },
+  "regression_results": [
+    {
+      "model": "Simple Linear (Year)",
+      "MAE": 0.7638,
+      "MSE": 1.1882,
+      "RMSE": 1.09,
+      "R2": 0.8626,
+      "CV_R2": 0.9147
+    },
+    {
+      "model": "Multiple Linear",
+      "MAE": 0.7638,
+      "MSE": 1.1882,
+      "RMSE": 1.09,
+      "R2": 0.8626,
+      "CV_R2": 0.9147
+    },
+    {
+      "model": "Polynomial (deg=2)",
+      "MAE": 1.5923,
+      "MSE": 8.8945,
+      "RMSE": 2.9824,
+      "R2": -0.0285,
+      "CV_R2": -80.5232
+    },
+    {
+      "model": "Ridge (alpha=1)",
+      "MAE": 0.7586,
+      "MSE": 1.1031,
+      "RMSE": 1.0503,
+      "R2": 0.8724,
+      "CV_R2": 0.9306
+    },
+    {
+      "model": "Lasso (alpha=0.01)",
+      "MAE": 0.7677,
+      "MSE": 1.099,
+      "RMSE": 1.0483,
+      "R2": 0.8729,
+      "CV_R2": 0.9251
+    },
+    {
+      "model": "ElasticNet",
+      "MAE": 0.8504,
+      "MSE": 1.1653,
+      "RMSE": 1.0795,
+      "R2": 0.8653,
+      "CV_R2": 0.8732
+    },
+    {
+      "model": "Random Forest Reg",
+      "MAE": 0.4452,
+      "MSE": 0.757,
+      "RMSE": 0.8701,
+      "R2": 0.9125,
+      "CV_R2": 0.9464
+    }
+  ],
+  "classification_results": [
+    {
+      "model": "Logistic Regression",
+      "Accuracy": 0.875,
+      "Macro_Precision": 0.8792,
+      "Macro_Recall": 0.869,
+      "Macro_F1": 0.8725,
+      "ROC_AUC": 0.9685
+    },
+    {
+      "model": "KNN (k=5)",
+      "Accuracy": 0.8393,
+      "Macro_Precision": 0.8412,
+      "Macro_Recall": 0.8372,
+      "Macro_F1": 0.834,
+      "ROC_AUC": 0.9513
+    },
+    {
+      "model": "Decision Tree",
+      "Accuracy": 0.9107,
+      "Macro_Precision": 0.9079,
+      "Macro_Recall": 0.9107,
+      "Macro_F1": 0.9088,
+      "ROC_AUC": 0.9332
+    },
+    {
+      "model": "Random Forest Clf",
+      "Accuracy": 0.8571,
+      "Macro_Precision": 0.852,
+      "Macro_Recall": 0.8547,
+      "Macro_F1": 0.8522,
+      "ROC_AUC": 0.9598
+    },
+    {
+      "model": "SVM (RBF)",
+      "Accuracy": 0.8571,
+      "Macro_Precision": 0.8551,
+      "Macro_Recall": 0.8515,
+      "Macro_F1": 0.8528,
+      "ROC_AUC": 0.9528
+    },
+    {
+      "model": "Gaussian NB",
+      "Accuracy": 0.7679,
+      "Macro_Precision": 0.778,
+      "Macro_Recall": 0.7703,
+      "Macro_F1": 0.744,
+      "ROC_AUC": 0.8995
+    }
+  ],
+  "best_regressor": "Random Forest Reg",
+  "best_classifier": "Decision Tree"
+}
