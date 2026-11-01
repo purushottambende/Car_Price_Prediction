@@ -49,13 +49,12 @@ st.markdown("""
   /* Gradient header */
   .hero-banner {
       background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      padding: 2rem 2.5rem 1.5rem;
+      padding: 0.75rem 2rem;
       border-radius: 16px;
       color: white;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
   }
-  .hero-banner h1 { font-size: 2.4rem; font-weight: 700; margin-bottom: 0.3rem; }
-  .hero-banner p  { font-size: 1.05rem; opacity: 0.85; }
+  .hero-banner h1 { font-size: 2rem; font-weight: 700; margin: 0; }
 
   /* Metric cards */
   .metric-card {
@@ -172,7 +171,6 @@ def cat_badge(cat: str) -> str:
 st.markdown("""
 <div class="hero-banner">
   <h1>🚗 CarPriceIQ</h1>
-  <p>AI-powered used car valuation · Regression + Classification · Built for the ML Course</p>
 </div>
 """, unsafe_allow_html=True)
 
