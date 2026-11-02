@@ -177,8 +177,8 @@ st.markdown("""
 # ══════════════════════════════════════════════════════════════════════════════
 # TABS
 # ══════════════════════════════════════════════════════════════════════════════
-tab_predict, tab_perf, tab_about = st.tabs(
-    ["🔮 Predict", "📊 Model Performance", "ℹ️ About"]
+tab_predict, tab_about = st.tabs(
+    ["🔮 Predict", "ℹ️ About"]
 )
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -364,86 +364,7 @@ with tab_predict:
             st.info("👈 Fill in the car details in the sidebar and click **Predict Now**")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# TAB 2 – MODEL PERFORMANCE
-# ══════════════════════════════════════════════════════════════════════════════
-with tab_perf:
-    st.markdown("## 📊 Model Performance Comparison")
-
-    if not models_exist():
-        st.warning("Run `python train_models.py` to generate performance data.")
-        st.stop()
-
-    try:
-        _, _, meta_perf = load_models()
-    except Exception:
-        st.warning("Could not load metadata.")
-        st.stop()
-
-    col1, col2 = st.columns(2, gap="large")
-
-    with col1:
-        st.markdown("### 📈 Regression Results")
-        reg_df = pd.DataFrame(meta_perf.get("regression_results", []))
-        if not reg_df.empty:
-            st.dataframe(
-                reg_df.style.highlight_max(subset=["R2", "CV_R2"], color="#1a472a")
-                            .highlight_min(subset=["MAE", "RMSE"], color="#1a472a")
-                            .format(precision=4),
-                use_container_width=True
-            )
-            best_reg = meta_perf.get("best_regressor", "")
-            st.success(f"🏆 Best Regressor: **{best_reg}**")
-
-        # Chart
-        chart_path = ASSETS_DIR / "regression_comparison.png"
-        if chart_path.exists():
-            st.image(str(chart_path), use_container_width=True)
-
-        chart_path2 = ASSETS_DIR / "regression_actual_vs_pred.png"
-        if chart_path2.exists():
-            st.image(str(chart_path2), caption="Actual vs Predicted & Residuals", use_container_width=True)
-
-    with col2:
-        st.markdown("### 🏷️ Classification Results")
-        clf_df = pd.DataFrame(meta_perf.get("classification_results", []))
-        if not clf_df.empty:
-            st.dataframe(
-                clf_df.style.highlight_max(
-                    subset=["Accuracy", "Macro_F1"], color="#1a472a"
-                ).format(precision=4),
-                use_container_width=True
-            )
-            best_clf = meta_perf.get("best_classifier", "")
-            st.success(f"🏆 Best Classifier: **{best_clf}**")
-
-        chart_path = ASSETS_DIR / "classification_comparison.png"
-        if chart_path.exists():
-            st.image(str(chart_path), use_container_width=True)
-
-        chart_path = ASSETS_DIR / "confusion_matrix.png"
-        if chart_path.exists():
-            st.image(str(chart_path), caption="Confusion Matrix (Best Classifier)", use_container_width=True)
-
-        chart_path = ASSETS_DIR / "roc_curves.png"
-        if chart_path.exists():
-            st.image(str(chart_path), caption="ROC Curves (One-vs-Rest)", use_container_width=True)
-
-    st.markdown("---")
-    st.markdown("### 🔍 EDA Charts")
-    eda_charts = [
-        ("price_distribution.png", "Selling Price Distribution"),
-        ("price_vs_year_kms.png", "Price vs Year & Kms Driven"),
-        ("avg_price_by_brand.png", "Average Price by Brand"),
-        ("avg_price_fuel_trans.png", "Price by Fuel & Transmission"),
-        ("correlation_heatmap.png", "Feature Correlation Heatmap"),
-    ]
-    for fname, caption in eda_charts:
-        path = ASSETS_DIR / fname
-        if path.exists():
-            st.image(str(path), caption=caption, use_container_width=True)
-
-# ══════════════════════════════════════════════════════════════════════════════
-# TAB 3 – ABOUT
+# TAB 2 – ABOUT
 # ══════════════════════════════════════════════════════════════════════════════
 with tab_about:
     st.markdown("## ℹ️ About This Project")
