@@ -294,7 +294,8 @@ with tab_predict:
                 owner_labels.get(owner, str(owner))
             ]
         }
-        st.dataframe(pd.DataFrame(summary_data), hide_index=True, use_container_width=True)
+        summary_df = pd.DataFrame(summary_data, index=range(1, len(summary_data["Field"]) + 1))
+        st.dataframe(summary_df, use_container_width=True)
 
     with col_right:
         if predict_btn:
