@@ -101,28 +101,12 @@
   },
   "regression_results": [
     {
-      "model": "Simple Linear (Year)",
-      "MAE": 0.7638,
-      "MSE": 1.1882,
-      "RMSE": 1.09,
-      "R2": 0.8626,
-      "CV_R2": 0.9147
-    },
-    {
       "model": "Multiple Linear",
       "MAE": 0.7638,
       "MSE": 1.1882,
       "RMSE": 1.09,
       "R2": 0.8626,
       "CV_R2": 0.9147
-    },
-    {
-      "model": "Polynomial (deg=2)",
-      "MAE": 1.5923,
-      "MSE": 8.8945,
-      "RMSE": 2.9824,
-      "R2": -0.0285,
-      "CV_R2": -80.5232
     },
     {
       "model": "Ridge (alpha=1)",
@@ -141,15 +125,7 @@
       "CV_R2": 0.9251
     },
     {
-      "model": "ElasticNet",
-      "MAE": 0.8504,
-      "MSE": 1.1653,
-      "RMSE": 1.0795,
-      "R2": 0.8653,
-      "CV_R2": 0.8732
-    },
-    {
-      "model": "Random Forest Reg",
+      "model": "Random Forest",
       "MAE": 0.4452,
       "MSE": 0.757,
       "RMSE": 0.8701,
@@ -183,7 +159,7 @@
       "ROC_AUC": 0.9332
     },
     {
-      "model": "Random Forest Clf",
+      "model": "Random Forest",
       "Accuracy": 0.8571,
       "Macro_Precision": 0.852,
       "Macro_Recall": 0.8547,
@@ -197,16 +173,8 @@
       "Macro_Recall": 0.8515,
       "Macro_F1": 0.8528,
       "ROC_AUC": 0.9528
-    },
-    {
-      "model": "Gaussian NB",
-      "Accuracy": 0.7679,
-      "Macro_Precision": 0.778,
-      "Macro_Recall": 0.7703,
-      "Macro_F1": 0.744,
-      "ROC_AUC": 0.8995
     }
   ],
-  "best_regressor": "Random Forest Reg",
+  "best_regressor": "Random Forest",
   "best_classifier": "Decision Tree"
 }
