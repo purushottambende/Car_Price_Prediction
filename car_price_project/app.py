@@ -32,7 +32,7 @@ if str(ROOT) not in sys.path:
 
 # ── Page config (MUST be first Streamlit call) ────────────────────────────
 st.set_page_config(
-    page_title="CarPriceIQ – Used Car Valuation",
+    page_title="CarPriceIQ – Used Car Price Estimator",
     page_icon="🚗",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -171,6 +171,7 @@ def cat_badge(cat: str) -> str:
 st.markdown("""
 <div class="hero-banner">
   <h1>🚗 CarPriceIQ</h1>
+  <p style="margin:0.3rem 0 0; opacity:0.75; font-size:0.95rem;">Estimate the fair market value of any used car in seconds</p>
 </div>
 """, unsafe_allow_html=True)
 
