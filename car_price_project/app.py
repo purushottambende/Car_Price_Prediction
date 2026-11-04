@@ -204,7 +204,7 @@ with tab_predict:
     # ── SIDEBAR INPUTS ────────────────────────────────────────────────────
     with st.sidebar:
         st.markdown("### 🛠️ Car Details")
-        st.caption("Fill in the details and click **Predict**")
+        st.caption("Adjust the inputs below and hit **Predict** to get an estimate.")
 
         brand = st.selectbox(
             "Brand",
@@ -291,6 +291,7 @@ with tab_predict:
 
     with col_left:
         st.markdown("#### 📋 Car Summary")
+        st.caption("Review your inputs before predicting.")
         summary_data = {
             "Field": ["Brand", "Year", "Present Price", "Kms Driven",
                        "Fuel", "Seller", "Transmission", "Owners"],
