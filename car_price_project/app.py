@@ -1,12 +1,11 @@
 """
-app.py  –  Second-Hand Car Price Prediction & Classification
-============================================================
+app.py  -  Second-Hand Car Price Prediction & Classification
 Streamlit web application.
 
 Run from the project root:
     streamlit run app.py
 
-The app expects:
+Requires:
   models/regressor.joblib
   models/classifier.joblib
   models/metadata.json
