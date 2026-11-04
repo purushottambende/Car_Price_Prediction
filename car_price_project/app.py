@@ -86,20 +86,21 @@ st.markdown("""
   /* Sidebar */
   section[data-testid="stSidebar"] { background: #0f0c29; }
   section[data-testid="stSidebar"] * { color: #e0e0ff; }
+  section[data-testid="stSidebar"] .stMarkdown h3 { color: #c9b8ff; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.4rem; }
 
   /* Predict button */
   div.stButton > button {
       background: linear-gradient(135deg, #7b2ff7, #f107a3);
       color: white;
       border: none;
-      border-radius: 10px;
-      padding: 0.6rem 2rem;
+      border-radius: 12px;
+      padding: 0.65rem 2rem;
       font-size: 1rem;
       font-weight: 600;
       width: 100%;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, transform 0.1s;
   }
-  div.stButton > button:hover { opacity: 0.88; }
+  div.stButton > button:hover { opacity: 0.88; transform: translateY(-1px); }
 </style>
 """, unsafe_allow_html=True)
 
