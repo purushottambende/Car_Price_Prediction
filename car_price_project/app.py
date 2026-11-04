@@ -399,6 +399,12 @@ This project uses the **CarDekho Used Cars** dataset containing **302 records** 
 - **Preprocessing pipeline:** `BrandExtractor → CarAgeEngineer → Imputer → Scaler + OHE`
 - **IQR outlier filtering** applied before training
 - **80/20 train-test split** with `random_state=42`
+
+### 📊 Best Model Results
+| Task | Model | Score |
+|---|---|---|
+| Regression | Random Forest | R² = 0.91 |
+| Classification | Decision Tree | Accuracy = 91.1% |
         """)
 
     with col_b:
@@ -430,4 +436,4 @@ This project uses the **CarDekho Used Cars** dataset containing **302 records** 
         """)
 
     st.markdown("---")
-    st.caption("Built with ❤️ using Python & Streamlit · CarPriceIQ v1.0")
+    st.caption("Built with ❤️ using Python & Streamlit · CarPriceIQ v1.0 · Dataset: CarDekho")
