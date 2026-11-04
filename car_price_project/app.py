@@ -208,6 +208,7 @@ with tab_predict:
         brand = st.selectbox(
             "Brand",
             options=cat_opts.get("Brand", ["Maruti"]),
+            help="Select the car manufacturer",
             key="brand"
         )
 
@@ -218,6 +219,7 @@ with tab_predict:
             max_value=int(year_range["max"]),
             value=int(year_range["default"]),
             step=1,
+            help="Year the car was manufactured",
             key="year"
         )
 
@@ -229,6 +231,7 @@ with tab_predict:
             value=float(present_range["default"]),
             step=0.1,
             format="%.2f",
+            help="Current ex-showroom price of this model (check manufacturer website)",
             key="present_price"
         )
 
@@ -239,18 +242,21 @@ with tab_predict:
             max_value=int(kms_range["max"]),
             value=int(kms_range["default"]),
             step=500,
+            help="Total odometer reading in kilometres",
             key="kms"
         )
 
         fuel = st.selectbox(
             "Fuel Type",
             options=cat_opts.get("Fuel_Type", ["Petrol", "Diesel", "CNG"]),
+            help="Type of fuel the car runs on",
             key="fuel"
         )
 
         seller = st.selectbox(
             "Seller Type",
             options=cat_opts.get("Seller_Type", ["Dealer", "Individual"]),
+            help="Whether the car is being sold by a dealer or an individual",
             key="seller"
         )
 
