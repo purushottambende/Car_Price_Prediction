@@ -362,7 +362,7 @@ with tab_predict:
 
                 # Deal rating
                 if listed_price and listed_price > 0:
-                    st.markdown("<br>", unsafe_allow_html=True)
+                    st.divider()
                     deal_html = deal_rating_html(pred_price, listed_price)
                     st.markdown(f"**Deal Rating:** {deal_html}", unsafe_allow_html=True)
                     diff = listed_price - pred_price
@@ -373,7 +373,16 @@ with tab_predict:
                 st.error(f"Prediction failed: {e}")
                 st.exception(e)
         else:
-            st.info("👈 Fill in the car details in the sidebar and click **Predict Now**")
+            st.markdown("""
+            <div style="background:rgba(123,47,247,0.08); border:1px solid rgba(123,47,247,0.3);
+                        border-radius:12px; padding:1.2rem 1.5rem; margin-top:1rem; text-align:center;">
+              <div style="font-size:1.8rem;">�</div>
+              <div style="font-weight:600; margin-top:0.4rem;">Ready to Predict</div>
+              <div style="opacity:0.6; font-size:0.88rem; margin-top:0.3rem;">
+                Fill in the car details on the left and hit <strong>Predict Now</strong>
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # TAB 2 – ABOUT
