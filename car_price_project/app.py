@@ -173,6 +173,9 @@ st.markdown("""
   <h1>🚗 CarPriceIQ</h1>
   <p style="margin:0.3rem 0 0; opacity:0.75; font-size:0.95rem;">Estimate the fair market value of any used car in seconds</p>
 </div>
+<p style="font-size:0.8rem; opacity:0.55; margin-bottom:1rem;">
+  Trained on 302 CarDekho records &nbsp;·&nbsp; Random Forest (Regression) &nbsp;·&nbsp; Decision Tree (Classification)
+</p>
 """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
