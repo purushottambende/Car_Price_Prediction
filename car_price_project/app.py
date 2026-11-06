@@ -173,9 +173,20 @@ st.markdown("""
   <h1>🚗 CarPriceIQ</h1>
   <p style="margin:0.3rem 0 0; opacity:0.75; font-size:0.95rem;">Estimate the fair market value of any used car in seconds</p>
 </div>
-<p style="font-size:0.8rem; opacity:0.55; margin-bottom:1rem;">
-  Trained on 302 CarDekho records &nbsp;·&nbsp; Random Forest (Regression) &nbsp;·&nbsp; Decision Tree (Classification)
-</p>
+<div style="display:flex; gap:0.6rem; margin-bottom:1.2rem; flex-wrap:wrap;">
+  <span style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+               border-radius:20px; padding:0.3rem 0.9rem; font-size:0.8rem; color:#c9b8ff;">
+    📦 302 training records
+  </span>
+  <span style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+               border-radius:20px; padding:0.3rem 0.9rem; font-size:0.8rem; color:#c9b8ff;">
+    📈 Regression R² = 0.91
+  </span>
+  <span style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+               border-radius:20px; padding:0.3rem 0.9rem; font-size:0.8rem; color:#c9b8ff;">
+    🎯 Classification Accuracy = 91.1%
+  </span>
+</div>
 """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -275,6 +286,7 @@ with tab_predict:
         )
 
         st.markdown("---")
+        st.caption("💡 Tip: Showroom price has the biggest impact on the prediction.")
         listed_price = st.number_input(
             "Your Asking Price (Lakhs ₹) – optional",
             min_value=0.0, max_value=500.0, value=0.0, step=0.1, format="%.2f",
