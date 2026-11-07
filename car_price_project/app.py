@@ -48,10 +48,11 @@ st.markdown("""
   /* Gradient header */
   .hero-banner {
       background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      padding: 0.75rem 2rem;
+      padding: 1rem 2rem;
       border-radius: 16px;
       color: white;
       margin-bottom: 1rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
   }
   .hero-banner h1 { font-size: 2rem; font-weight: 700; margin: 0; }
 
@@ -64,6 +65,7 @@ st.markdown("""
       color: white;
       text-align: center;
       margin: 0.3rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
   }
   .metric-card .label { font-size: 0.82rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.05em; }
   .metric-card .value { font-size: 1.8rem; font-weight: 700; margin-top: 0.2rem; }
@@ -286,7 +288,7 @@ with tab_predict:
         )
 
         st.markdown("---")
-        st.caption("💡 Tip: Showroom price has the biggest impact on the prediction.")
+        st.markdown("<p style='font-size:0.78rem; opacity:0.5; margin-bottom:0.3rem;'>OPTIONAL</p>", unsafe_allow_html=True)
         listed_price = st.number_input(
             "Your Asking Price (Lakhs ₹) – optional",
             min_value=0.0, max_value=500.0, value=0.0, step=0.1, format="%.2f",
@@ -393,7 +395,11 @@ with tab_predict:
 # TAB 2 – ABOUT
 # ══════════════════════════════════════════════════════════════════════════════
 with tab_about:
-    st.markdown("## ℹ️ About This Project")
+    st.markdown("""
+    <h2 style="border-left: 4px solid #7b2ff7; padding-left: 0.7rem; margin-bottom: 1rem;">
+      About This Project
+    </h2>
+    """, unsafe_allow_html=True)
 
     col_a, col_b = st.columns(2)
 
