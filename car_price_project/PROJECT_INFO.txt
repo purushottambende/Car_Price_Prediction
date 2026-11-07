@@ -1,0 +1,270 @@
+================================================================================
+                   CAR PRICE PREDICTION & CLASSIFICATION
+                         Project Report Information
+================================================================================
+
+--------------------------------------------------------------------------------
+1. PROJECT TITLE
+--------------------------------------------------------------------------------
+Second-Hand Car Price Prediction and Classification using Machine Learning
+
+--------------------------------------------------------------------------------
+2. PROJECT OVERVIEW
+--------------------------------------------------------------------------------
+This project builds a machine learning system to predict the selling price of
+used cars (Regression) and classify the price into Low / Medium / High categories
+(Classification). The trained models are deployed as an interactive web application
+built with Streamlit where users can enter car details and get an instant price
+estimate along with a deal rating.
+
+--------------------------------------------------------------------------------
+3. PROBLEM STATEMENT
+--------------------------------------------------------------------------------
+The used car market in India is large and unorganized. Buyers and sellers often
+struggle to determine a fair price for a second-hand vehicle. This project aims
+to solve that by training ML models on historical car sale data to predict the
+expected selling price and classify whether a car falls in the Low, Medium, or
+High price range, helping users make informed decisions.
+
+--------------------------------------------------------------------------------
+4. OBJECTIVES
+--------------------------------------------------------------------------------
+- Predict the selling price of a used car given its specifications (Regression).
+- Classify the price of a used car as Low, Medium, or High (Classification).
+- Compare multiple regression and classification algorithms and select the best.
+- Deploy the final models in a user-friendly web application.
+- Provide a Deal Rating feature that tells users if an asking price is fair.
+
+--------------------------------------------------------------------------------
+5. DATASET INFORMATION
+--------------------------------------------------------------------------------
+Name        : CarDekho Used Cars Dataset
+Source      : CarDekho.com (publicly available on Kaggle)
+Records     : 302 rows
+Features    : 9 columns
+
+Columns:
+  - Car_Name       : Name/model of the car (string)
+  - Year           : Year of manufacture (integer)
+  - Selling_Price  : Price the car was sold at in Lakhs INR (float) -- TARGET
+  - Present_Price  : Current ex-showroom price in Lakhs INR (float)
+  - Kms_Driven     : Total kilometres driven (integer)
+  - Fuel_Type      : Petrol / Diesel / CNG (categorical)
+  - Seller_Type    : Dealer / Individual (categorical)
+  - Transmission   : Manual / Automatic (categorical)
+  - Owner          : Number of previous owners (integer)
+
+--------------------------------------------------------------------------------
+6. DATA PREPROCESSING
+--------------------------------------------------------------------------------
+Steps performed:
+  1. Converted numeric columns to proper dtype using regex extraction.
+  2. Imputed missing values:
+       - Numeric columns  -> median
+       - Categorical cols -> mode
+  3. Dropped rows where target (Selling_Price) was missing.
+  4. Removed outliers using IQR method on Selling_Price, Kms_Driven,
+     and Present_Price columns.
+     -> Rows reduced from 301 to 276 after outlier removal.
+  5. Created price categories for classification target using pd.qcut (3 bins):
+       - Low    : bottom 33%
+       - Medium : middle 33%
+       - High   : top 33%
+
+--------------------------------------------------------------------------------
+7. FEATURE ENGINEERING
+--------------------------------------------------------------------------------
+Two new features were derived inside the sklearn Pipeline:
+
+  - Brand       : Extracted from the first word of Car_Name
+                  (e.g., "maruti swift" -> "Maruti")
+  - Car_Age     : CURRENT_YEAR (2024) - Year
+                  (e.g., manufactured in 2018 -> Car_Age = 6)
+  - Km_Per_Year : Kms_Driven / Car_Age
+                  (average kilometres driven per year)
+
+These are computed automatically inside custom sklearn transformers
+(BrandExtractor, CarAgeFeatureEngineer) so the same transformations apply
+consistently during both training and prediction.
+
+--------------------------------------------------------------------------------
+8. PREPROCESSING PIPELINE
+--------------------------------------------------------------------------------
+A single sklearn Pipeline is used for all models:
+
+  BrandExtractor
+       |
+  CarAgeFeatureEngineer
+       |
+  ColumnTransformer
+    |- Numeric features  -> SimpleImputer(median) -> StandardScaler
+    |- Categorical feats -> SimpleImputer(mode)   -> OneHotEncoder
+       |
+  ML Model (Regressor or Classifier)
+
+Numeric features  : Year, Present_Price, Kms_Driven, Owner, Car_Age, Km_Per_Year
+Categorical feats : Brand, Fuel_Type, Seller_Type, Transmission
+
+Train/Test Split  : 80% train, 20% test, random_state = 42
+
+--------------------------------------------------------------------------------
+9. MODELS IMPLEMENTED
+--------------------------------------------------------------------------------
+
+REGRESSION (predicting Selling_Price in Lakhs INR):
+  1. Multiple Linear Regression
+  2. Ridge Regression         (best alpha selected from [0.01, 0.1, 1, 10, 100])
+  3. Lasso Regression         (best alpha selected from [0.01, 0.1, 1, 10, 100])
+  4. Random Forest Regressor  (n_estimators=100, max_depth=10)
+
+CLASSIFICATION (predicting Low / Medium / High):
+  1. Logistic Regression
+  2. K-Nearest Neighbours     (k=5)
+  3. Decision Tree            (max_depth=8)
+  4. Random Forest Classifier (n_estimators=100, max_depth=10)
+  5. Support Vector Machine   (kernel=RBF)
+
+--------------------------------------------------------------------------------
+10. MODEL EVALUATION RESULTS
+--------------------------------------------------------------------------------
+
+REGRESSION RESULTS:
+  Metric used for selection: R² Score (Test) and 5-Fold Cross-Validation R²
+
+  Model                  MAE     RMSE    R²      CV R²
+  ---------------------  ------  ------  ------  ------
+  Multiple Linear        0.764   1.090   0.863   0.915
+  Ridge (alpha=1)        0.759   1.050   0.872   0.931
+  Lasso (alpha=0.01)     0.768   1.048   0.873   0.925
+  Random Forest  *BEST*  0.445   0.870   0.912   0.946
+
+  Best Model : Random Forest Regressor
+  Best R²    : 0.9125 (Test), 0.9464 (5-Fold CV)
+  Best MAE   : 0.445 Lakhs INR
+
+CLASSIFICATION RESULTS:
+  Metric used for selection: Macro F1 Score
+
+  Model                  Accuracy  Macro F1  ROC-AUC
+  ---------------------  --------  --------  -------
+  Logistic Regression    0.875     0.873     0.969
+  KNN (k=5)              0.839     0.834     0.951
+  Decision Tree  *BEST*  0.911     0.909     0.933
+  Random Forest          0.857     0.852     0.960
+  SVM (RBF)              0.857     0.853     0.953
+
+  Best Model   : Decision Tree Classifier
+  Accuracy     : 91.1%
+  Macro F1     : 0.909
+  ROC-AUC(OVR) : 0.933
+
+--------------------------------------------------------------------------------
+11. WEB APPLICATION FEATURES
+--------------------------------------------------------------------------------
+Framework : Streamlit
+File      : app.py
+
+Features:
+  - Sidebar form with all car input fields (Brand, Year, Showroom Price,
+    Kms Driven, Fuel Type, Seller Type, Transmission, Owners)
+  - Car Summary table showing all inputs before prediction
+  - Predict button that runs both models simultaneously
+  - Estimated Market Price displayed in Indian Rupee format
+  - Price Category badge (Low / Medium / High) with color coding
+  - Class Probability bars for all three categories
+  - Deal Rating feature: if user enters an asking price, it shows
+      * Good Deal   : asking price > 10% below predicted
+      * Fair Deal   : asking price within +/- 10% of predicted
+      * Overpriced  : asking price > 10% above predicted
+  - About tab with dataset details, methodology and model results
+
+--------------------------------------------------------------------------------
+12. PROJECT STRUCTURE
+--------------------------------------------------------------------------------
+car_price_project/
+  |-- app.py                  Web application (Streamlit)
+  |-- train_models.py         Model training script
+  |-- requirements.txt        Python dependencies
+  |-- README.md               Project documentation
+  |-- data/
+  |     car_data.csv          Raw dataset
+  |-- src/
+  |     __init__.py
+  |     preprocessing.py      Custom sklearn transformers
+  |-- models/
+  |     regressor.joblib      Saved regression pipeline
+  |     classifier.joblib     Saved classification pipeline
+  |     metadata.json         Dropdown options and model metadata
+  |-- assets/                 EDA and evaluation plots (PNG)
+  |     price_distribution.png
+  |     price_vs_year_kms.png
+  |     avg_price_by_brand.png
+  |     avg_price_fuel_trans.png
+  |     correlation_heatmap.png
+  |     regression_actual_vs_pred.png
+  |     regression_comparison.png
+  |     confusion_matrix.png
+  |     roc_curves.png
+  |     classification_comparison.png
+  |-- notebooks/
+        car_price.ipynb       Exploratory analysis notebook
+
+--------------------------------------------------------------------------------
+13. TECHNOLOGIES AND LIBRARIES
+--------------------------------------------------------------------------------
+Language    : Python 3.10+
+Libraries   :
+  - streamlit    1.32.0   Web application framework
+  - scikit-learn 1.5.1    Machine learning models and pipelines
+  - pandas       2.2.0    Data loading and manipulation
+  - numpy        1.26.4   Numerical computations
+  - matplotlib   3.8.3    Plotting and visualization
+  - seaborn      0.13.2   Statistical visualization
+  - joblib       1.4.2    Model serialization (save/load)
+
+--------------------------------------------------------------------------------
+14. HOW TO RUN THE PROJECT
+--------------------------------------------------------------------------------
+Step 1: Install dependencies
+        pip install -r requirements.txt
+
+Step 2: Train the models
+        python train_models.py
+        (This generates models/ folder and all plots in assets/)
+
+Step 3: Launch the web app
+        streamlit run app.py
+        (Opens at http://localhost:8501)
+
+--------------------------------------------------------------------------------
+15. LIMITATIONS
+--------------------------------------------------------------------------------
+- Small dataset (302 rows): predictions for rare brands may be unreliable.
+- Present_Price is the strongest predictor; not always available in real life.
+- Car_Age is computed relative to a fixed year (2024); will need updating later.
+- Trained only on Indian market data; not suitable for other regions.
+- No real-time data; prices may not reflect current market conditions.
+
+--------------------------------------------------------------------------------
+16. FUTURE SCOPE
+--------------------------------------------------------------------------------
+- Collect more data from multiple sources to improve model accuracy.
+- Add car condition (excellent / good / fair / poor) as a feature.
+- Include engine size, mileage (kmpl), number of airbags as features.
+- Retrain models periodically with fresh market data.
+- Deploy on Streamlit Cloud or Heroku for public access.
+- Add user authentication to save prediction history.
+
+--------------------------------------------------------------------------------
+17. CONCLUSION
+--------------------------------------------------------------------------------
+The project successfully demonstrates the application of machine learning for
+a real-world regression and classification problem. Among all regression models,
+Random Forest achieved the best R² of 0.91, and among classifiers, Decision Tree
+achieved the highest accuracy of 91.1%. The Streamlit web app makes the models
+accessible without any coding knowledge, providing instant price estimates and
+deal ratings to users.
+
+================================================================================
+END OF DOCUMENT
+================================================================================
