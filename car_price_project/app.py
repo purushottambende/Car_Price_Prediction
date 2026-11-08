@@ -67,13 +67,13 @@ st.markdown("""
       margin: 0.3rem;
       box-shadow: 0 2px 12px rgba(0,0,0,0.3);
   }
-  .metric-card .label { font-size: 0.82rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.05em; }
-  .metric-card .value { font-size: 1.8rem; font-weight: 700; margin-top: 0.2rem; }
+  .metric-card .label { font-size: 0.82rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.08em; }
+  .metric-card .value { font-size: 1.9rem; font-weight: 700; margin-top: 0.2rem; }
 
   /* Deal badge */
-  .deal-good    { background:#1a472a; color:#69ff93; padding:0.5rem 1rem; border-radius:8px; font-weight:600; display:inline-block; }
-  .deal-fair    { background:#4a3800; color:#ffd166; padding:0.5rem 1rem; border-radius:8px; font-weight:600; display:inline-block; }
-  .deal-over    { background:#4a0d0d; color:#ff6b6b; padding:0.5rem 1rem; border-radius:8px; font-weight:600; display:inline-block; }
+  .deal-good    { background:#1a472a; color:#69ff93; padding:0.5rem 1.2rem; border-radius:10px; font-weight:600; display:inline-block; }
+  .deal-fair    { background:#4a3800; color:#ffd166; padding:0.5rem 1.2rem; border-radius:10px; font-weight:600; display:inline-block; }
+  .deal-over    { background:#4a0d0d; color:#ff6b6b; padding:0.5rem 1.2rem; border-radius:10px; font-weight:600; display:inline-block; }
 
   /* Category badge */
   .cat-low    { background:#1a472a; color:#69ff93; }
@@ -82,8 +82,8 @@ st.markdown("""
   .cat-badge  { padding:0.35rem 0.9rem; border-radius:20px; font-weight:600; display:inline-block; }
 
   /* Tab overrides */
-  .stTabs [data-baseweb="tab"] { font-weight: 500; }
-  .stTabs [aria-selected="true"] { border-bottom: 3px solid #7b2ff7; }
+  .stTabs [data-baseweb="tab"] { font-weight: 500; font-size: 0.95rem; padding: 0.5rem 1.2rem; }
+  .stTabs [aria-selected="true"] { border-bottom: 3px solid #7b2ff7; color: #c9b8ff; }
 
   /* Sidebar */
   section[data-testid="stSidebar"] { background: #0f0c29; }
