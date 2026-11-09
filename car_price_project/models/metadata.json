@@ -111,79 +111,15 @@
   },
   "regression_results": [
     {
-      "model": "Simple Linear (Year)",
-      "MAE": 0.7435,
-      "MSE": 1.2504,
-      "RMSE": 1.1182,
-      "R2": 0.9952,
-      "CV_R2": 0.9949
-    },
-    {
-      "model": "Multiple Linear",
-      "MAE": 0.7435,
-      "MSE": 1.2504,
-      "RMSE": 1.1182,
-      "R2": 0.9952,
-      "CV_R2": 0.9949
-    },
-    {
-      "model": "Polynomial (deg=2)",
+      "model": "Polynomial Regression (deg=2)",
       "MAE": 0.0943,
       "MSE": 0.0391,
       "RMSE": 0.1978,
       "R2": 0.9999,
       "CV_R2": 0.9999
-    },
-    {
-      "model": "Ridge (alpha=0.1)",
-      "MAE": 0.7429,
-      "MSE": 1.2481,
-      "RMSE": 1.1172,
-      "R2": 0.9953,
-      "CV_R2": 0.9949
-    },
-    {
-      "model": "Lasso (alpha=0.01)",
-      "MAE": 0.7557,
-      "MSE": 1.3106,
-      "RMSE": 1.1448,
-      "R2": 0.995,
-      "CV_R2": 0.9947
-    },
-    {
-      "model": "ElasticNet",
-      "MAE": 1.1338,
-      "MSE": 2.7925,
-      "RMSE": 1.6711,
-      "R2": 0.9894,
-      "CV_R2": 0.989
-    },
-    {
-      "model": "Random Forest Reg",
-      "MAE": 0.2024,
-      "MSE": 0.2626,
-      "RMSE": 0.5124,
-      "R2": 0.999,
-      "CV_R2": 0.999
     }
   ],
   "classification_results": [
-    {
-      "model": "Logistic Regression",
-      "Accuracy": 0.9821,
-      "Macro_Precision": 0.9819,
-      "Macro_Recall": 0.9822,
-      "Macro_F1": 0.982,
-      "ROC_AUC": 0.9993
-    },
-    {
-      "model": "KNN (k=5)",
-      "Accuracy": 0.8292,
-      "Macro_Precision": 0.8287,
-      "Macro_Recall": 0.8281,
-      "Macro_F1": 0.8281,
-      "ROC_AUC": 0.9431
-    },
     {
       "model": "Decision Tree",
       "Accuracy": 0.9945,
@@ -191,32 +127,8 @@
       "Macro_Recall": 0.9946,
       "Macro_F1": 0.9944,
       "ROC_AUC": 0.9969
-    },
-    {
-      "model": "Random Forest Clf",
-      "Accuracy": 0.9683,
-      "Macro_Precision": 0.9683,
-      "Macro_Recall": 0.9685,
-      "Macro_F1": 0.9682,
-      "ROC_AUC": 0.9972
-    },
-    {
-      "model": "SVM (RBF)",
-      "Accuracy": 0.9518,
-      "Macro_Precision": 0.9515,
-      "Macro_Recall": 0.9514,
-      "Macro_F1": 0.9512,
-      "ROC_AUC": 0.9965
-    },
-    {
-      "model": "Gaussian NB",
-      "Accuracy": 0.5813,
-      "Macro_Precision": 0.5936,
-      "Macro_Recall": 0.5696,
-      "Macro_F1": 0.4996,
-      "ROC_AUC": 0.8411
     }
   ],
-  "best_regressor": "Polynomial (deg=2)",
+  "best_regressor": "Polynomial Regression (deg=2)",
   "best_classifier": "Decision Tree"
 }
