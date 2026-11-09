@@ -33,7 +33,7 @@ if str(ROOT) not in sys.path:
 # ── Page config (MUST be first Streamlit call) ────────────────────────────
 st.set_page_config(
     page_title="CarPriceIQ – Used Car Price Estimator",
-    page_icon="🚗",
+    page_icon="C",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -41,68 +41,448 @@ st.set_page_config(
 # ── Custom CSS ────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
 
-  html, body, [class*="css"]  { font-family: 'Inter', sans-serif; }
-
-  /* Gradient header */
-  .hero-banner {
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      padding: 1rem 2rem;
-      border-radius: 16px;
-      color: white;
-      margin-bottom: 1rem;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  :root {
+    --ink: #15202b;
+    --ink-soft: #3d4f5f;
+    --muted: #6b7c8c;
+    --paper: #f3f6f8;
+    --paper-2: #e8eef2;
+    --surface: rgba(255, 255, 255, 0.82);
+    --line: rgba(21, 32, 43, 0.10);
+    --accent: #0b7a72;
+    --accent-deep: #065f59;
+    --accent-soft: rgba(11, 122, 114, 0.12);
+    --good: #0f6b45;
+    --good-bg: #e6f6ee;
+    --fair: #8a6a12;
+    --fair-bg: #fff6db;
+    --over: #9b2c2c;
+    --over-bg: #fde8e8;
+    --high: #1e4d8c;
+    --high-bg: #e8f0fb;
+    --radius: 18px;
+    --shadow: 0 18px 40px rgba(21, 32, 43, 0.08);
   }
-  .hero-banner h1 { font-size: 2rem; font-weight: 700; margin: 0; }
 
-  /* Metric cards */
-  .metric-card {
-      background: linear-gradient(135deg, #1a1a2e, #16213e);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 14px;
-      padding: 1.2rem 1.5rem;
-      color: white;
-      text-align: center;
-      margin: 0.3rem;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  html, body, [class*="css"], .stApp {
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--ink);
   }
-  .metric-card .label { font-size: 0.82rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.08em; }
-  .metric-card .value { font-size: 1.9rem; font-weight: 700; margin-top: 0.2rem; }
 
-  /* Deal badge */
-  .deal-good    { background:#1a472a; color:#69ff93; padding:0.5rem 1.2rem; border-radius:10px; font-weight:600; display:inline-block; }
-  .deal-fair    { background:#4a3800; color:#ffd166; padding:0.5rem 1.2rem; border-radius:10px; font-weight:600; display:inline-block; }
-  .deal-over    { background:#4a0d0d; color:#ff6b6b; padding:0.5rem 1.2rem; border-radius:10px; font-weight:600; display:inline-block; }
+  .stApp {
+    background:
+      radial-gradient(1200px 520px at 8% -10%, rgba(11, 122, 114, 0.16), transparent 55%),
+      radial-gradient(900px 480px at 100% 0%, rgba(30, 77, 140, 0.10), transparent 50%),
+      linear-gradient(180deg, #f7fafb 0%, var(--paper) 45%, #eef3f6 100%);
+  }
 
-  /* Category badge */
-  .cat-low    { background:#1a472a; color:#69ff93; }
-  .cat-medium { background:#4a3800; color:#ffd166; }
-  .cat-high   { background:#1a1a8c; color:#85c1e9; }
-  .cat-badge  { padding:0.35rem 0.9rem; border-radius:20px; font-weight:600; display:inline-block; }
+  .stApp::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(21, 32, 43, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(21, 32, 43, 0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.45), transparent 70%);
+    z-index: 0;
+  }
 
-  /* Tab overrides */
-  .stTabs [data-baseweb="tab"] { font-weight: 500; font-size: 0.95rem; padding: 0.5rem 1.2rem; }
-  .stTabs [aria-selected="true"] { border-bottom: 3px solid #7b2ff7; color: #c9b8ff; }
+  .block-container {
+    padding-top: 1.4rem !important;
+    padding-bottom: 2.5rem !important;
+    max-width: 1180px;
+  }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 2.1rem 2.2rem 1.9rem;
+    background:
+      linear-gradient(125deg, rgba(255,255,255,0.92), rgba(255,255,255,0.72)),
+      linear-gradient(135deg, #0b7a72 0%, #164e63 55%, #1e3a5f 100%);
+    background-blend-mode: soft-light, normal;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.35rem;
+    animation: riseIn 0.55s ease-out both;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    right: -80px;
+    top: -60px;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.22), transparent 68%);
+    pointer-events: none;
+  }
+
+  .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .brand-mark .logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.28);
+    color: #fff;
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
+  .hero h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(2.1rem, 4vw, 2.85rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    color: #fff;
+    margin: 0;
+    line-height: 1.05;
+  }
+
+  .hero p {
+    margin: 0.7rem 0 0;
+    max-width: 34rem;
+    color: rgba(255,255,255,0.82);
+    font-size: 1.02rem;
+    line-height: 1.55;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 1.15rem;
+  }
+
+  .hero-chip {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: rgba(255,255,255,0.92);
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 999px;
+    padding: 0.35rem 0.8rem;
+  }
+
+  /* Section labels */
+  .section-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 0.25rem;
+  }
+
+  .section-sub {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin: 0 0 1rem;
+  }
+
+  /* Summary grid */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+    animation: riseIn 0.45s ease-out both;
+  }
+
+  .summary-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 0.85rem 0.95rem;
+    backdrop-filter: blur(8px);
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+
+  .summary-item:hover {
+    transform: translateY(-2px);
+    border-color: rgba(11, 122, 114, 0.35);
+  }
+
+  .summary-item .k {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .summary-item .v {
+    margin-top: 0.28rem;
+    font-family: 'Sora', sans-serif;
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* Result panel */
+  .result-shell {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.3rem 1.35rem;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+    animation: riseIn 0.5s ease-out both;
+  }
+
+  .price-panel {
+    background: linear-gradient(145deg, #0b7a72, #0f4c5c 70%);
+    border-radius: 16px;
+    padding: 1.25rem 1.2rem 1.15rem;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  .price-panel .label {
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    font-weight: 600;
+  }
+
+  .price-panel .value {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-top: 0.25rem;
+    line-height: 1.1;
+  }
+
+  .price-panel .sub {
+    margin-top: 0.35rem;
+    opacity: 0.75;
+    font-size: 0.9rem;
+  }
+
+  .deal-good,
+  .deal-fair,
+  .deal-over {
+    display: inline-block;
+    margin-top: 0.35rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .deal-good { background: var(--good-bg); color: var(--good); }
+  .deal-fair { background: var(--fair-bg); color: var(--fair); }
+  .deal-over { background: var(--over-bg); color: var(--over); }
+
+  .cat-badge {
+    display: inline-block;
+    padding: 0.32rem 0.75rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.82rem;
+  }
+
+  .cat-low    { background: var(--good-bg); color: var(--good); }
+  .cat-medium { background: var(--fair-bg); color: var(--fair); }
+  .cat-high   { background: var(--high-bg); color: var(--high); }
+
+  .empty-state {
+    text-align: left;
+    padding: 0.2rem 0.1rem 0.4rem;
+  }
+
+  .empty-state h3 {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.2rem;
+    margin: 0 0 0.45rem;
+    color: var(--ink);
+  }
+
+  .empty-state p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .step-list {
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .step-list li {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+  }
+
+  .step-list .n {
+    flex: 0 0 auto;
+    width: 1.45rem;
+    height: 1.45rem;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent-deep);
+    font-weight: 700;
+    font-size: 0.78rem;
+    display: grid;
+    place-items: center;
+    margin-top: 0.05rem;
+  }
+
+  /* About */
+  .about-lead {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    max-width: 46rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .info-panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 1.1rem 1.15rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .info-panel h3 {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.02rem;
+    margin: 0 0 0.55rem;
+  }
+
+  .warn {
+    border-left: 3px solid #c9851a;
+    background: #fff8e8;
+    padding: 0.75rem 0.9rem;
+    border-radius: 0 12px 12px 0;
+    color: #6a4d10;
+    margin: 0.55rem 0;
+    font-size: 0.92rem;
+  }
+
+  /* Tabs */
+  .stTabs [data-baseweb="tab-list"] {
+    gap: 0.35rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .stTabs [data-baseweb="tab"] {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 0.65rem 1.05rem;
+    color: var(--muted);
+  }
+
+  .stTabs [aria-selected="true"] {
+    color: var(--accent-deep) !important;
+    border-bottom: 3px solid var(--accent) !important;
+  }
 
   /* Sidebar */
-  section[data-testid="stSidebar"] { background: #0f0c29; }
-  section[data-testid="stSidebar"] * { color: #e0e0ff; }
-  section[data-testid="stSidebar"] .stMarkdown h3 { color: #c9b8ff; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.4rem; }
+  section[data-testid="stSidebar"] {
+    background:
+      linear-gradient(180deg, #10252b 0%, #0d1c22 100%);
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+
+  section[data-testid="stSidebar"] * {
+    color: #dce7ec !important;
+  }
+
+  section[data-testid="stSidebar"] .stMarkdown h3 {
+    font-family: 'Sora', sans-serif;
+    color: #ffffff !important;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.15rem;
+  }
+
+  section[data-testid="stSidebar"] label {
+    font-weight: 500 !important;
+  }
+
+  section[data-testid="stSidebar"] [data-baseweb="select"] > div,
+  section[data-testid="stSidebar"] input,
+  section[data-testid="stSidebar"] [data-baseweb="input"] {
+    background: rgba(255,255,255,0.06) !important;
+    border-color: rgba(255,255,255,0.12) !important;
+  }
 
   /* Predict button */
   div.stButton > button {
-      background: linear-gradient(135deg, #7b2ff7, #f107a3);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      padding: 0.65rem 2rem;
-      font-size: 1rem;
-      font-weight: 600;
-      width: 100%;
-      transition: opacity 0.2s, transform 0.1s;
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    color: white !important;
+    border: none;
+    border-radius: 14px;
+    padding: 0.72rem 1.4rem;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    width: 100%;
+    letter-spacing: 0.01em;
+    box-shadow: 0 10px 24px rgba(11, 122, 114, 0.28);
+    transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
   }
-  div.stButton > button:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  div.stButton > button:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px rgba(11, 122, 114, 0.34);
+  }
+
+  div.stButton > button:active {
+    transform: translateY(0);
+  }
+
+  /* Progress / dataframe polish */
+  [data-testid="stProgressBar"] > div {
+    border-radius: 999px;
+  }
+
+  [data-testid="stDataFrame"] {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  footer { visibility: hidden; }
+
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 1.5rem 1.25rem; }
+    .summary-grid { grid-template-columns: 1fr; }
+  }
 </style>
 """, unsafe_allow_html=True)
 
@@ -156,11 +536,11 @@ def deal_rating_html(predicted: float, listed: float) -> str:
         return ""
     ratio = (listed - predicted) / predicted
     if ratio < -0.10:
-        return '<span class="deal-good">🟢 Good Deal — priced >10% below market</span>'
+        return '<span class="deal-good">Good deal — priced more than 10% below market</span>'
     elif ratio <= 0.10:
-        return '<span class="deal-fair">🟡 Fair Deal — priced within ±10% of market</span>'
+        return '<span class="deal-fair">Fair deal — priced within ±10% of market</span>'
     else:
-        return '<span class="deal-over">🔴 Overpriced — priced >10% above market</span>'
+        return '<span class="deal-over">Overpriced — more than 10% above market</span>'
 
 
 def cat_badge(cat: str) -> str:
@@ -168,21 +548,37 @@ def cat_badge(cat: str) -> str:
     return f'<span class="cat-badge {cls}">{cat}</span>'
 
 
+def summary_html(rows: list[tuple[str, str]]) -> str:
+    items = "".join(
+        f'<div class="summary-item"><div class="k">{k}</div><div class="v">{v}</div></div>'
+        for k, v in rows
+    )
+    return f'<div class="summary-grid">{items}</div>'
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # HERO BANNER
 # ══════════════════════════════════════════════════════════════════════════════
 st.markdown("""
-<div class="hero-banner">
-  <h1>🚗 CarPriceIQ</h1>
-  <p style="margin:0.3rem 0 0; opacity:0.75; font-size:0.95rem;">Estimate the fair market value of any used car in seconds</p>
+<div class="hero">
+  <div class="brand-mark">
+    <div class="logo">CQ</div>
+  </div>
+  <h1>CarPriceIQ</h1>
+  <p>Professional used-car valuation powered by machine learning. Enter the vehicle details and get a fair market estimate in seconds.</p>
+  <div class="hero-meta">
+    <span class="hero-chip">Market price estimate</span>
+    <span class="hero-chip">Deal rating</span>
+    <span class="hero-chip">Price category</span>
+  </div>
 </div>
 """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # TABS
 # ══════════════════════════════════════════════════════════════════════════════
-tab_predict, tab_about = st.tabs(
-    ["🔮 Predict", "ℹ️ About"]
+tab_predict, tab_insights, tab_about = st.tabs(
+    ["Predict", "Model Insights", "About"]
 )
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -191,7 +587,7 @@ tab_predict, tab_about = st.tabs(
 with tab_predict:
     if not models_exist():
         st.error(
-            "⚠️ Model files not found in `models/`. "
+            "Model files not found in `models/`. "
             "Please run `python train_models.py` first."
         )
         st.stop()
@@ -207,8 +603,8 @@ with tab_predict:
 
     # ── SIDEBAR INPUTS ────────────────────────────────────────────────────
     with st.sidebar:
-        st.markdown("### 🛠️ Car Details")
-        st.caption("Adjust the inputs below and hit **Predict** to get an estimate.")
+        st.markdown("### Vehicle details")
+        st.caption("Tune the inputs, then run a valuation.")
 
         brand = st.selectbox(
             "Brand",
@@ -218,7 +614,7 @@ with tab_predict:
 
         year_range = num_range.get("Year", {"min": 2000, "max": 2024, "default": 2016})
         year = st.slider(
-            "Year of Manufacture",
+            "Year of manufacture",
             min_value=int(year_range["min"]),
             max_value=int(year_range["max"]),
             value=int(year_range["default"]),
@@ -228,7 +624,7 @@ with tab_predict:
 
         present_range = num_range.get("Present_Price", {"min": 0.3, "max": 100.0, "default": 7.0})
         present_price = st.number_input(
-            "Showroom Price (Lakhs ₹)",
+            "Showroom price (Lakhs ₹)",
             min_value=float(present_range["min"]),
             max_value=float(present_range["max"]),
             value=float(present_range["default"]),
@@ -239,7 +635,7 @@ with tab_predict:
 
         kms_range = num_range.get("Kms_Driven", {"min": 500, "max": 200000, "default": 40000})
         kms = st.number_input(
-            "Kilometres Driven",
+            "Kilometres driven",
             min_value=int(kms_range["min"]),
             max_value=int(kms_range["max"]),
             value=int(kms_range["default"]),
@@ -248,13 +644,13 @@ with tab_predict:
         )
 
         fuel = st.selectbox(
-            "Fuel Type",
+            "Fuel type",
             options=cat_opts.get("Fuel_Type", ["Petrol", "Diesel", "CNG"]),
             key="fuel"
         )
 
         seller = st.selectbox(
-            "Seller Type",
+            "Seller type",
             options=cat_opts.get("Seller_Type", ["Dealer", "Individual"]),
             key="seller"
         )
@@ -266,49 +662,57 @@ with tab_predict:
         )
 
         owner_opts = cat_opts.get("Owner", [0, 1, 2, 3])
-        owner_labels = {0: "First Owner", 1: "Second Owner", 2: "Third Owner", 3: "3+ Owners"}
+        owner_labels = {0: "First owner", 1: "Second owner", 2: "Third owner", 3: "3+ owners"}
         owner = st.selectbox(
-            "Number of Previous Owners",
+            "Previous owners",
             options=owner_opts,
             format_func=lambda x: owner_labels.get(x, str(x)),
             key="owner"
         )
 
         st.markdown("---")
-        st.markdown("<p style='font-size:0.78rem; opacity:0.5; margin-bottom:0.3rem;'>OPTIONAL</p>", unsafe_allow_html=True)
+        st.caption("Optional comparison")
         listed_price = st.number_input(
-            "Your Asking Price (Lakhs ₹) – optional",
+            "Asking price (Lakhs ₹)",
             min_value=0.0, max_value=500.0, value=0.0, step=0.1, format="%.2f",
-            key="listed"
+            key="listed",
+            help="Leave at 0 if you only want a market estimate."
         )
 
-        predict_btn = st.button("🔮 Predict Now", key="predict_btn")
+        predict_btn = st.button("Get valuation", key="predict_btn")
 
     # ── MAIN CONTENT AREA ─────────────────────────────────────────────────
-    col_left, col_right = st.columns([3, 2], gap="large")
+    col_left, col_right = st.columns([1.15, 1], gap="large")
 
     with col_left:
-        st.markdown("#### 📋 Car Summary")
-        st.caption("Review your inputs before predicting.")
-        summary_data = {
-            "Field": ["Brand", "Year", "Present Price", "Kms Driven",
-                       "Fuel", "Seller", "Transmission", "Owners"],
-            "Value": [
-                brand, year, f"₹ {present_price:.2f} L", f"{kms:,} km",
-                fuel, seller, transmission,
-                owner_labels.get(owner, str(owner))
-            ]
-        }
-        summary_df = pd.DataFrame(summary_data, index=range(1, len(summary_data["Field"]) + 1))
-        st.dataframe(summary_df, use_container_width=True)
+        st.markdown('<p class="section-title">Vehicle snapshot</p>', unsafe_allow_html=True)
+        st.markdown(
+            '<p class="section-sub">A live summary of the configuration you selected.</p>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            summary_html([
+                ("Brand", str(brand)),
+                ("Year", str(year)),
+                ("Showroom price", f"₹ {present_price:.2f} L"),
+                ("Kilometres", f"{kms:,} km"),
+                ("Fuel", str(fuel)),
+                ("Seller", str(seller)),
+                ("Transmission", str(transmission)),
+                ("Ownership", owner_labels.get(owner, str(owner))),
+            ]),
+            unsafe_allow_html=True,
+        )
 
     with col_right:
+        st.markdown('<p class="section-title">Valuation result</p>', unsafe_allow_html=True)
+        st.markdown(
+            '<p class="section-sub">Estimated market price, category, and deal signal.</p>',
+            unsafe_allow_html=True,
+        )
+
         if predict_btn:
             try:
-                # Build raw input row (matching FEATURE_COLS in train_models.py)
-                # Car_Name is needed so BrandExtractor can parse Brand
-                # We already have the brand as a string, but the pipeline expects Car_Name
-                # So we reconstruct a Car_Name from brand for compatibility
                 input_dict = {
                     "Car_Name":       brand.lower(),
                     "Year":           int(year),
@@ -322,131 +726,183 @@ with tab_predict:
                 input_df = pd.DataFrame([input_dict])
 
                 pred_price = float(reg_pipe.predict(input_df)[0])
-                pred_price = max(pred_price, 0.01)   # clamp to positive
+                pred_price = max(pred_price, 0.01)
 
                 pred_cat   = clf_pipe.predict(input_df)[0]
                 proba_raw  = clf_pipe.predict_proba(input_df)[0]
                 clf_classes = clf_pipe.classes_
                 proba_dict = dict(zip(clf_classes, proba_raw))
 
-                # Display results
-                st.markdown("### 🎯 Prediction Results")
+                st.markdown('<div class="result-shell">', unsafe_allow_html=True)
 
-                # Price card
                 st.markdown(f"""
-                <div class="metric-card">
-                  <div class="label">Estimated Market Price</div>
+                <div class="price-panel">
+                  <div class="label">Estimated market price</div>
                   <div class="value">{format_inr(pred_price)}</div>
-                  <div style="opacity:0.6;font-size:0.85rem">({pred_price:.2f} Lakhs ₹)</div>
+                  <div class="sub">{pred_price:.2f} Lakhs ₹</div>
                 </div>
                 """, unsafe_allow_html=True)
 
-                # Category card
-                st.markdown(f"""
-                <div style="margin-top:0.8rem">
-                  <strong>Price Category:</strong> {cat_badge(str(pred_cat))}
-                </div>
-                """, unsafe_allow_html=True)
+                st.markdown(
+                    f'<div style="margin-bottom:0.85rem"><strong style="color:var(--ink-soft)">Price category</strong> '
+                    f'&nbsp;{cat_badge(str(pred_cat))}</div>',
+                    unsafe_allow_html=True,
+                )
 
-                # Probability bars
-                st.markdown("<div style='margin-top:0.8rem'><strong>Class Probabilities</strong></div>", unsafe_allow_html=True)
+                st.markdown(
+                    '<strong style="color:var(--ink-soft)">Class probabilities</strong>',
+                    unsafe_allow_html=True,
+                )
                 for label in ["Low", "Medium", "High"]:
                     prob = proba_dict.get(label, 0.0)
                     st.progress(float(prob), text=f"{label}: {prob*100:.1f}%")
 
-                # Deal rating
                 if listed_price and listed_price > 0:
                     st.divider()
                     deal_html = deal_rating_html(pred_price, listed_price)
-                    st.markdown(f"**Deal Rating:** {deal_html}", unsafe_allow_html=True)
+                    st.markdown(f"**Deal rating** {deal_html}", unsafe_allow_html=True)
                     diff = listed_price - pred_price
-                    diff_sign = "+" if diff >= 0 else "-"
-                    st.caption(f"Listed {diff_sign}₹ {abs(diff):.2f} L vs predicted")
+                    diff_sign = "+" if diff >= 0 else "−"
+                    st.caption(f"Asking price is {diff_sign}₹ {abs(diff):.2f} L versus the estimate")
+
+                st.markdown("</div>", unsafe_allow_html=True)
 
             except Exception as e:
                 st.error(f"Prediction failed: {e}")
                 st.exception(e)
         else:
             st.markdown("""
-            <div style="background:rgba(123,47,247,0.08); border:1px solid rgba(123,47,247,0.3);
-                        border-radius:12px; padding:1.2rem 1.5rem; margin-top:1rem; text-align:center;">
-              <div style="font-size:1.8rem;">�</div>
-              <div style="font-weight:600; margin-top:0.4rem;">Ready to Predict</div>
-              <div style="opacity:0.6; font-size:0.88rem; margin-top:0.3rem;">
-                Fill in the car details on the left and hit <strong>Predict Now</strong>
+            <div class="result-shell">
+              <div class="empty-state">
+                <h3>Ready when you are</h3>
+                <p>Set the vehicle details in the sidebar and run a valuation to see the market estimate here.</p>
+                <ul class="step-list">
+                  <li><span class="n">1</span><span>Choose brand, year, and showroom price</span></li>
+                  <li><span class="n">2</span><span>Add kilometres, fuel, and ownership details</span></li>
+                  <li><span class="n">3</span><span>Optionally enter an asking price for a deal check</span></li>
+                </ul>
               </div>
             </div>
             """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# TAB 2 – ABOUT
+# TAB 2 – MODEL INSIGHTS
+# ══════════════════════════════════════════════════════════════════════════════
+with tab_insights:
+    st.markdown('<p class="section-title">Model performance</p>', unsafe_allow_html=True)
+    st.markdown(
+        '<p class="section-sub">Training visuals that show how the regression and classification models behave.</p>',
+        unsafe_allow_html=True,
+    )
+
+    chart_groups = [
+        (
+            "Regression quality",
+            [
+                ("regression_actual_vs_pred.png", "Actual vs predicted selling price"),
+                ("regression_comparison.png", "Regression model comparison"),
+            ],
+        ),
+        (
+            "Classification quality",
+            [
+                ("confusion_matrix.png", "Confusion matrix"),
+                ("roc_curves.png", "ROC curves"),
+                ("classification_comparison.png", "Classification model comparison"),
+            ],
+        ),
+        (
+            "Data exploration",
+            [
+                ("price_distribution.png", "Price distribution"),
+                ("correlation_heatmap.png", "Feature correlation"),
+                ("avg_price_by_brand.png", "Average price by brand"),
+                ("avg_price_fuel_trans.png", "Fuel & transmission effect"),
+                ("price_vs_year_kms.png", "Price vs year and kilometres"),
+            ],
+        ),
+    ]
+
+    for title, charts in chart_groups:
+        st.markdown(f"#### {title}")
+        existing = [(ASSETS_DIR / name, caption) for name, caption in charts if (ASSETS_DIR / name).exists()]
+        if not existing:
+            st.info(f"No charts found for {title.lower()}. Run `train_models.py` to generate them.")
+            continue
+
+        for i in range(0, len(existing), 2):
+            cols = st.columns(2)
+            for col, (path, caption) in zip(cols, existing[i:i + 2]):
+                with col:
+                    st.image(str(path), caption=caption, use_container_width=True)
+
+# ══════════════════════════════════════════════════════════════════════════════
+# TAB 3 – ABOUT
 # ══════════════════════════════════════════════════════════════════════════════
 with tab_about:
-    st.markdown("""
-    <h2 style="border-left: 4px solid #7b2ff7; padding-left: 0.7rem; margin-bottom: 1rem;">
-      About This Project
-    </h2>
-    """, unsafe_allow_html=True)
+    st.markdown('<p class="section-title">About CarPriceIQ</p>', unsafe_allow_html=True)
+    st.markdown(
+        '<p class="about-lead">CarPriceIQ estimates the fair market value of used cars and classifies them into Low, Medium, or High price bands using a trained machine-learning pipeline.</p>',
+        unsafe_allow_html=True,
+    )
 
     col_a, col_b = st.columns(2)
 
     with col_a:
         st.markdown("""
-### 📚 Dataset Description
-This project uses the **CarDekho Used Cars** dataset containing **302 records** of second-hand cars sold in India.
+        <div class="info-panel">
+          <h3>Dataset</h3>
+          <p style="margin:0;color:var(--ink-soft);line-height:1.55">
+            Built on the CarDekho used-cars dataset with 302 records covering brand, year,
+            showroom price, kilometres driven, fuel type, seller type, transmission, and ownership.
+          </p>
+        </div>
+        """, unsafe_allow_html=True)
 
-| Feature | Description |
-|---|---|
-| **Car_Name** | Model name (brand extracted automatically) |
-| **Year** | Year of manufacture |
-| **Selling_Price** | Price the car was sold at (Lakhs ₹) · **Target** |
-| **Present_Price** | Current ex-showroom price (Lakhs ₹) |
-| **Kms_Driven** | Total distance driven (km) |
-| **Fuel_Type** | Petrol / Diesel / CNG |
-| **Seller_Type** | Dealer or Individual |
-| **Transmission** | Manual or Automatic |
-| **Owner** | Number of previous owners |
+        st.markdown("""
+        <div class="info-panel">
+          <h3>Methodology</h3>
+          <ul style="margin:0;padding-left:1.1rem;color:var(--ink-soft);line-height:1.6">
+            <li>Feature engineering for car age and kilometres per year</li>
+            <li>Brand extraction, imputation, scaling, and one-hot encoding</li>
+            <li>IQR-based outlier filtering before training</li>
+            <li>80/20 train-test split with a fixed random seed</li>
+          </ul>
+        </div>
+        """, unsafe_allow_html=True)
 
-### 🧠 Methodology
-- **Feature engineering:** `Car_Age = 2024 – Year`, `Km_Per_Year = Kms / Car_Age`
-- **Preprocessing pipeline:** `BrandExtractor → CarAgeEngineer → Imputer → Scaler + OHE`
-- **IQR outlier filtering** applied before training
-- **80/20 train-test split** with `random_state=42`
-
-### 📊 Best Model Results
-| Task | Model | Score |
-|---|---|---|
-| Regression | Random Forest | R² = 0.91 |
-| Classification | Decision Tree | Accuracy = 91.1% |
-        """)
+        st.markdown("""
+        <div class="info-panel">
+          <h3>Best model results</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        st.dataframe(
+            pd.DataFrame([
+                {"Task": "Regression", "Model": "Random Forest", "Score": "R² = 0.91"},
+                {"Task": "Classification", "Model": "Decision Tree", "Score": "Accuracy = 91.1%"},
+            ]),
+            use_container_width=True,
+            hide_index=True,
+        )
 
     with col_b:
         st.markdown("""
-### 📉 Project Limitations
+        <div class="info-panel">
+          <h3>Limitations</h3>
+          <div class="warn">Small dataset — rare brands or unusual configurations can be less reliable.</div>
+          <div class="warn">Showroom price is a strong predictor and should be entered carefully.</div>
+          <div class="warn">Car age is computed relative to 2024; retrain periodically for later use.</div>
+          <div class="warn">Trained primarily for the Indian used-car market context.</div>
+        </div>
+        """, unsafe_allow_html=True)
 
-> ⚠️ **Small dataset** – only 302 rows. Rare brands / unusual configurations may produce less reliable predictions.
+        st.markdown("""
+        <div class="info-panel">
+          <h3>Tech stack</h3>
+          <p style="margin:0;color:var(--ink-soft);line-height:1.7">
+            Python · scikit-learn · pandas · NumPy · Streamlit · joblib · matplotlib · seaborn
+          </p>
+        </div>
+        """, unsafe_allow_html=True)
 
-> ⚠️ **Present_Price dependency** – the showroom price is a very strong predictor. In practice, it is usually available from car listing websites.
-
-> ⚠️ **Fixed reference year** – `Car_Age` is computed relative to 2024. Predictions may drift if the app is used much later without retraining.
-
-> ⚠️ **Indian market only** – trained exclusively on Indian car data (Maruti, Hyundai, Honda, Toyota, etc.).
-
-### 🛠️ Tech Stack
-| Library | Version |
-|---|---|
-| Python | 3.14 |
-| scikit-learn | 1.9.1 |
-| pandas | 3.1.0 |
-| numpy | 2.5.4 |
-| streamlit | 1.66.1 |
-| joblib | 1.6.0 |
-| matplotlib | 3.11.2 |
-| seaborn | 0.13.2 |
-
-### 📖 Course
-**Machine Learning** – Unit III (Regression) & Unit IV (Classification)
-        """)
-
-    st.markdown("---")
-    st.caption("Built with ❤️ using Python & Streamlit · CarPriceIQ v1.0 · Dataset: CarDekho")
+    st.caption("CarPriceIQ · Machine Learning project · Dataset: CarDekho")
