@@ -82,7 +82,7 @@ print("=" * 60)
 print("LOADING DATA")
 print("=" * 60)
 
-DATA_PATH = ROOT / "data" / "car_data.csv"
+DATA_PATH = ROOT / "data" / "car_data_new.csv"
 df_raw = pd.read_csv(DATA_PATH)
 print(f"Shape: {df_raw.shape}")
 print("\nColumn dtypes:\n", df_raw.dtypes)

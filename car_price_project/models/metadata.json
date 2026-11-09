@@ -13,56 +13,66 @@
   ],
   "categorical_options": {
     "Brand": [
-      "Activa",
-      "Alto",
-      "Amaze",
-      "Bajaj",
-      "Baleno",
-      "Brio",
-      "Ciaz",
-      "City",
-      "Corolla",
-      "Creta",
-      "Dzire",
-      "Elantra",
-      "Eon",
-      "Ertiga",
-      "Etios",
-      "Fortuner",
-      "Grand",
-      "Hero",
+      "Acura",
+      "Alfa",
+      "Aston",
+      "Audi",
+      "Bentley",
+      "Bmw",
+      "Buick",
+      "Cadillac",
+      "Chevrolet",
+      "Chrysler",
+      "Dodge",
+      "Fiat",
+      "Ford",
+      "Genesis",
+      "Gmc",
       "Honda",
-      "Hyosung",
-      "I10",
-      "I20",
-      "Ignis",
-      "Innova",
-      "Jazz",
-      "Ktm",
-      "Mahindra",
-      "Omni",
-      "Ritz",
-      "Royal",
-      "S",
+      "Hummer",
+      "Hyundai",
+      "Infiniti",
+      "Jaguar",
+      "Jeep",
+      "Karma",
+      "Kia",
+      "Land",
+      "Lexus",
+      "Lincoln",
+      "Lotus",
+      "Lucid",
+      "Maserati",
+      "Maybach",
+      "Mazda",
+      "Mercedes-benz",
+      "Mercury",
+      "Mini",
+      "Mitsubishi",
+      "Nissan",
+      "Plymouth",
+      "Polestar",
+      "Pontiac",
+      "Porsche",
+      "Ram",
+      "Rivian",
+      "Rolls-royce",
+      "Saab",
+      "Saturn",
+      "Scion",
+      "Smart",
+      "Subaru",
       "Suzuki",
-      "Swift",
-      "Sx4",
-      "Tvs",
-      "Um",
-      "Verna",
-      "Vitara",
-      "Wagon",
-      "Xcent",
-      "Yamaha"
+      "Tesla",
+      "Toyota",
+      "Volkswagen",
+      "Volvo"
     ],
     "Fuel_Type": [
-      "CNG",
       "Diesel",
       "Petrol"
     ],
     "Seller_Type": [
-      "Dealer",
-      "Individual"
+      "Dealer"
     ],
     "Transmission": [
       "Automatic",
@@ -75,19 +85,19 @@
   },
   "numeric_ranges": {
     "Year": {
-      "min": 2003,
-      "max": 2018,
-      "default": 2014
+      "min": 1992,
+      "max": 2024,
+      "default": 2017
     },
     "Present_Price": {
-      "min": 0.32,
-      "max": 20.45,
-      "default": 5.835
+      "min": 1.86,
+      "max": 106.87,
+      "default": 33.3
     },
     "Kms_Driven": {
-      "min": 500.0,
-      "max": 92233.0,
-      "default": 31213.5
+      "min": 160.0,
+      "max": 325106.0,
+      "default": 92517.0
     },
     "Owner": {
       "min": 0,
@@ -96,85 +106,117 @@
     }
   },
   "category_thresholds": {
-    "Low_to_Medium_lakhs": 1.23,
-    "Medium_to_High_lakhs": 4.92
+    "Low_to_Medium_lakhs": 17.16,
+    "Medium_to_High_lakhs": 32.37
   },
   "regression_results": [
     {
-      "model": "Multiple Linear",
-      "MAE": 0.7638,
-      "MSE": 1.1882,
-      "RMSE": 1.09,
-      "R2": 0.8626,
-      "CV_R2": 0.9147
+      "model": "Simple Linear (Year)",
+      "MAE": 0.7435,
+      "MSE": 1.2504,
+      "RMSE": 1.1182,
+      "R2": 0.9952,
+      "CV_R2": 0.9949
     },
     {
-      "model": "Ridge (alpha=1)",
-      "MAE": 0.7586,
-      "MSE": 1.1031,
-      "RMSE": 1.0503,
-      "R2": 0.8724,
-      "CV_R2": 0.9306
+      "model": "Multiple Linear",
+      "MAE": 0.7435,
+      "MSE": 1.2504,
+      "RMSE": 1.1182,
+      "R2": 0.9952,
+      "CV_R2": 0.9949
+    },
+    {
+      "model": "Polynomial (deg=2)",
+      "MAE": 0.0943,
+      "MSE": 0.0391,
+      "RMSE": 0.1978,
+      "R2": 0.9999,
+      "CV_R2": 0.9999
+    },
+    {
+      "model": "Ridge (alpha=0.1)",
+      "MAE": 0.7429,
+      "MSE": 1.2481,
+      "RMSE": 1.1172,
+      "R2": 0.9953,
+      "CV_R2": 0.9949
     },
     {
       "model": "Lasso (alpha=0.01)",
-      "MAE": 0.7677,
-      "MSE": 1.099,
-      "RMSE": 1.0483,
-      "R2": 0.8729,
-      "CV_R2": 0.9251
+      "MAE": 0.7557,
+      "MSE": 1.3106,
+      "RMSE": 1.1448,
+      "R2": 0.995,
+      "CV_R2": 0.9947
     },
     {
-      "model": "Random Forest",
-      "MAE": 0.4452,
-      "MSE": 0.757,
-      "RMSE": 0.8701,
-      "R2": 0.9125,
-      "CV_R2": 0.9464
+      "model": "ElasticNet",
+      "MAE": 1.1338,
+      "MSE": 2.7925,
+      "RMSE": 1.6711,
+      "R2": 0.9894,
+      "CV_R2": 0.989
+    },
+    {
+      "model": "Random Forest Reg",
+      "MAE": 0.2024,
+      "MSE": 0.2626,
+      "RMSE": 0.5124,
+      "R2": 0.999,
+      "CV_R2": 0.999
     }
   ],
   "classification_results": [
     {
       "model": "Logistic Regression",
-      "Accuracy": 0.875,
-      "Macro_Precision": 0.8792,
-      "Macro_Recall": 0.869,
-      "Macro_F1": 0.8725,
-      "ROC_AUC": 0.9685
+      "Accuracy": 0.9821,
+      "Macro_Precision": 0.9819,
+      "Macro_Recall": 0.9822,
+      "Macro_F1": 0.982,
+      "ROC_AUC": 0.9993
     },
     {
       "model": "KNN (k=5)",
-      "Accuracy": 0.8393,
-      "Macro_Precision": 0.8412,
-      "Macro_Recall": 0.8372,
-      "Macro_F1": 0.834,
-      "ROC_AUC": 0.9513
+      "Accuracy": 0.8292,
+      "Macro_Precision": 0.8287,
+      "Macro_Recall": 0.8281,
+      "Macro_F1": 0.8281,
+      "ROC_AUC": 0.9431
     },
     {
       "model": "Decision Tree",
-      "Accuracy": 0.9107,
-      "Macro_Precision": 0.9079,
-      "Macro_Recall": 0.9107,
-      "Macro_F1": 0.9088,
-      "ROC_AUC": 0.9332
+      "Accuracy": 0.9945,
+      "Macro_Precision": 0.9944,
+      "Macro_Recall": 0.9946,
+      "Macro_F1": 0.9944,
+      "ROC_AUC": 0.9969
     },
     {
-      "model": "Random Forest",
-      "Accuracy": 0.8571,
-      "Macro_Precision": 0.852,
-      "Macro_Recall": 0.8547,
-      "Macro_F1": 0.8522,
-      "ROC_AUC": 0.9598
+      "model": "Random Forest Clf",
+      "Accuracy": 0.9683,
+      "Macro_Precision": 0.9683,
+      "Macro_Recall": 0.9685,
+      "Macro_F1": 0.9682,
+      "ROC_AUC": 0.9972
     },
     {
       "model": "SVM (RBF)",
-      "Accuracy": 0.8571,
-      "Macro_Precision": 0.8551,
-      "Macro_Recall": 0.8515,
-      "Macro_F1": 0.8528,
-      "ROC_AUC": 0.9528
+      "Accuracy": 0.9518,
+      "Macro_Precision": 0.9515,
+      "Macro_Recall": 0.9514,
+      "Macro_F1": 0.9512,
+      "ROC_AUC": 0.9965
+    },
+    {
+      "model": "Gaussian NB",
+      "Accuracy": 0.5813,
+      "Macro_Precision": 0.5936,
+      "Macro_Recall": 0.5696,
+      "Macro_F1": 0.4996,
+      "ROC_AUC": 0.8411
     }
   ],
-  "best_regressor": "Random Forest",
+  "best_regressor": "Polynomial (deg=2)",
   "best_classifier": "Decision Tree"
 }
