@@ -111,10 +111,11 @@ st.markdown("""
 # ══════════════════════════════════════════════════════════════════════════════
 MODELS_DIR = ROOT / "models"
 ASSETS_DIR = ROOT / "assets"
+MODEL_VERSION = "v2.0_2024"  # Update this to force cache reload
 
 
 @st.cache_resource(show_spinner="Loading models…")
-def load_models():
+def load_models(version=MODEL_VERSION):
     import joblib
     reg = joblib.load(MODELS_DIR / "regressor.joblib")
     clf = joblib.load(MODELS_DIR / "classifier.joblib")
