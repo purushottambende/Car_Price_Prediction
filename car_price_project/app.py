@@ -386,23 +386,54 @@ st.markdown("""
     font-size: 0.92rem;
   }
 
-  /* Tabs */
-  .stTabs [data-baseweb="tab-list"] {
-    gap: 0.35rem;
-    border-bottom: 1px solid var(--line);
+  /* Top navigation (radio) — always-visible labels */
+  .nav-wrap {
+    margin: 0 0 1.1rem;
   }
 
-  .stTabs [data-baseweb="tab"] {
-    font-family: 'Sora', sans-serif;
-    font-weight: 600;
-    font-size: 0.92rem;
-    padding: 0.65rem 1.05rem;
-    color: var(--muted);
+  div[data-testid="stRadio"] > div {
+    gap: 0.45rem !important;
+    flex-wrap: wrap !important;
   }
 
-  .stTabs [aria-selected="true"] {
-    color: var(--accent-deep) !important;
-    border-bottom: 3px solid var(--accent) !important;
+  div[data-testid="stRadio"] label {
+    background: rgba(255, 255, 255, 0.88) !important;
+    border: 1px solid rgba(21, 32, 43, 0.12) !important;
+    border-radius: 10px !important;
+    padding: 0.45rem 1rem !important;
+    margin-right: 0.15rem !important;
+  }
+
+  div[data-testid="stRadio"] label p,
+  div[data-testid="stRadio"] label span,
+  div[data-testid="stRadio"] label div,
+  div[data-testid="stRadio"] label * {
+    color: #243447 !important;
+    -webkit-text-fill-color: #243447 !important;
+    opacity: 1 !important;
+    font-family: 'Sora', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+  }
+
+  div[data-testid="stRadio"] label:hover {
+    border-color: rgba(11, 122, 114, 0.45) !important;
+  }
+
+  div[data-testid="stRadio"] label[data-checked="true"],
+  div[data-testid="stRadio"] label:has(input:checked) {
+    background: rgba(11, 122, 114, 0.12) !important;
+    border-color: #0b7a72 !important;
+  }
+
+  div[data-testid="stRadio"] label[data-checked="true"] *,
+  div[data-testid="stRadio"] label:has(input:checked) * {
+    color: #065f59 !important;
+    -webkit-text-fill-color: #065f59 !important;
+  }
+
+  div[data-testid="stRadio"] input {
+    accent-color: #0b7a72;
   }
 
   /* Sidebar */
@@ -412,13 +443,20 @@ st.markdown("""
     border-right: 1px solid rgba(255,255,255,0.06);
   }
 
-  section[data-testid="stSidebar"] * {
+  section[data-testid="stSidebar"] .stMarkdown,
+  section[data-testid="stSidebar"] .stMarkdown p,
+  section[data-testid="stSidebar"] .stCaption,
+  section[data-testid="stSidebar"] label,
+  section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
+  section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] * {
     color: #dce7ec !important;
+    -webkit-text-fill-color: #dce7ec !important;
   }
 
   section[data-testid="stSidebar"] .stMarkdown h3 {
     font-family: 'Sora', sans-serif;
     color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
     font-size: 1.05rem;
     letter-spacing: -0.02em;
     margin-bottom: 0.15rem;
@@ -428,11 +466,52 @@ st.markdown("""
     font-weight: 500 !important;
   }
 
+  /* Input values must stay dark on light fields */
   section[data-testid="stSidebar"] [data-baseweb="select"] > div,
+  section[data-testid="stSidebar"] [data-baseweb="input"],
+  section[data-testid="stSidebar"] [data-baseweb="input"] > div,
   section[data-testid="stSidebar"] input,
-  section[data-testid="stSidebar"] [data-baseweb="input"] {
-    background: rgba(255,255,255,0.06) !important;
-    border-color: rgba(255,255,255,0.12) !important;
+  section[data-testid="stSidebar"] textarea {
+    background: #f4f7f9 !important;
+    border-color: rgba(255,255,255,0.18) !important;
+    color: #15202b !important;
+    -webkit-text-fill-color: #15202b !important;
+  }
+
+  section[data-testid="stSidebar"] [data-baseweb="select"] *,
+  section[data-testid="stSidebar"] [data-baseweb="input"] *,
+  section[data-testid="stSidebar"] [data-baseweb="select"] span,
+  section[data-testid="stSidebar"] [data-baseweb="select"] div,
+  section[data-testid="stSidebar"] input,
+  section[data-testid="stSidebar"] input * {
+    color: #15202b !important;
+    -webkit-text-fill-color: #15202b !important;
+    opacity: 1 !important;
+  }
+
+  section[data-testid="stSidebar"] [data-testid="stNumberInput"] button,
+  section[data-testid="stSidebar"] [data-testid="stNumberInput"] svg {
+    color: #15202b !important;
+    fill: #15202b !important;
+  }
+
+  section[data-testid="stSidebar"] [data-testid="stSlider"] [data-testid="stTickBarMin"],
+  section[data-testid="stSidebar"] [data-testid="stSlider"] [data-testid="stTickBarMax"] {
+    color: #b7c4cc !important;
+    -webkit-text-fill-color: #b7c4cc !important;
+  }
+
+  /* Year slider value above thumb */
+  section[data-testid="stSidebar"] .stSlider [data-testid="stThumbValue"],
+  section[data-testid="stSidebar"] .stSlider [data-testid="stThumbValue"] *,
+  section[data-testid="stSidebar"] [data-testid="stSlider"] [data-testid="stThumbValue"],
+  section[data-testid="stSidebar"] [data-testid="stSlider"] [data-testid="stThumbValue"] *,
+  section[data-testid="stSidebar"] [data-baseweb="slider"] div[role="slider"] + div,
+  section[data-testid="stSidebar"] [data-baseweb="slider"] div[role="slider"] + div *,
+  section[data-testid="stSidebar"] [data-baseweb="slider"] [data-testid="stThumbValue"],
+  section[data-testid="stSidebar"] [data-baseweb="slider"] [data-testid="stThumbValue"] * {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
   }
 
   /* Predict button */
@@ -575,16 +654,22 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# TABS
+# NAVIGATION (radio avoids Streamlit tab fade bug)
 # ══════════════════════════════════════════════════════════════════════════════
-tab_predict, tab_insights, tab_about = st.tabs(
-    ["Predict", "Model Insights", "About"]
+st.markdown('<div class="nav-wrap">', unsafe_allow_html=True)
+page = st.radio(
+    "Navigation",
+    options=["Predict", "Model Insights", "About"],
+    horizontal=True,
+    label_visibility="collapsed",
+    key="main_nav",
 )
+st.markdown("</div>", unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# TAB 1 – PREDICT
+# PAGE 1 – PREDICT
 # ══════════════════════════════════════════════════════════════════════════════
-with tab_predict:
+if page == "Predict":
     if not models_exist():
         st.error(
             "Model files not found in `models/`. "
@@ -733,8 +818,6 @@ with tab_predict:
                 clf_classes = clf_pipe.classes_
                 proba_dict = dict(zip(clf_classes, proba_raw))
 
-                st.markdown('<div class="result-shell">', unsafe_allow_html=True)
-
                 st.markdown(f"""
                 <div class="price-panel">
                   <div class="label">Estimated market price</div>
@@ -765,8 +848,6 @@ with tab_predict:
                     diff_sign = "+" if diff >= 0 else "−"
                     st.caption(f"Asking price is {diff_sign}₹ {abs(diff):.2f} L versus the estimate")
 
-                st.markdown("</div>", unsafe_allow_html=True)
-
             except Exception as e:
                 st.error(f"Prediction failed: {e}")
                 st.exception(e)
@@ -786,9 +867,9 @@ with tab_predict:
             """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# TAB 2 – MODEL INSIGHTS
+# PAGE 2 – MODEL INSIGHTS
 # ══════════════════════════════════════════════════════════════════════════════
-with tab_insights:
+elif page == "Model Insights":
     st.markdown('<p class="section-title">Model performance</p>', unsafe_allow_html=True)
     st.markdown(
         '<p class="section-sub">Training visuals that show how the regression and classification models behave.</p>',
@@ -837,9 +918,9 @@ with tab_insights:
                     st.image(str(path), caption=caption, use_container_width=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# TAB 3 – ABOUT
+# PAGE 3 – ABOUT
 # ══════════════════════════════════════════════════════════════════════════════
-with tab_about:
+elif page == "About":
     st.markdown('<p class="section-title">About CarPriceIQ</p>', unsafe_allow_html=True)
     st.markdown(
         '<p class="about-lead">CarPriceIQ estimates the fair market value of used cars and classifies them into Low, Medium, or High price bands using a trained machine-learning pipeline.</p>',
