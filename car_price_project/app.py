@@ -659,7 +659,7 @@ st.markdown("""
 st.markdown('<div class="nav-wrap">', unsafe_allow_html=True)
 page = st.radio(
     "Navigation",
-    options=["Predict", "Model Insights", "About"],
+    options=["Predict", "About"],
     horizontal=True,
     label_visibility="collapsed",
     key="main_nav",
@@ -867,58 +867,7 @@ if page == "Predict":
             """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# PAGE 2 – MODEL INSIGHTS
-# ══════════════════════════════════════════════════════════════════════════════
-elif page == "Model Insights":
-    st.markdown('<p class="section-title">Model performance</p>', unsafe_allow_html=True)
-    st.markdown(
-        '<p class="section-sub">Training visuals that show how the regression and classification models behave.</p>',
-        unsafe_allow_html=True,
-    )
-
-    chart_groups = [
-        (
-            "Regression quality",
-            [
-                ("regression_actual_vs_pred.png", "Actual vs predicted selling price"),
-                ("regression_comparison.png", "Regression model comparison"),
-            ],
-        ),
-        (
-            "Classification quality",
-            [
-                ("confusion_matrix.png", "Confusion matrix"),
-                ("roc_curves.png", "ROC curves"),
-                ("classification_comparison.png", "Classification model comparison"),
-            ],
-        ),
-        (
-            "Data exploration",
-            [
-                ("price_distribution.png", "Price distribution"),
-                ("correlation_heatmap.png", "Feature correlation"),
-                ("avg_price_by_brand.png", "Average price by brand"),
-                ("avg_price_fuel_trans.png", "Fuel & transmission effect"),
-                ("price_vs_year_kms.png", "Price vs year and kilometres"),
-            ],
-        ),
-    ]
-
-    for title, charts in chart_groups:
-        st.markdown(f"#### {title}")
-        existing = [(ASSETS_DIR / name, caption) for name, caption in charts if (ASSETS_DIR / name).exists()]
-        if not existing:
-            st.info(f"No charts found for {title.lower()}. Run `train_models.py` to generate them.")
-            continue
-
-        for i in range(0, len(existing), 2):
-            cols = st.columns(2)
-            for col, (path, caption) in zip(cols, existing[i:i + 2]):
-                with col:
-                    st.image(str(path), caption=caption, use_container_width=True)
-
-# ══════════════════════════════════════════════════════════════════════════════
-# PAGE 3 – ABOUT
+# PAGE 2 – ABOUT
 # ══════════════════════════════════════════════════════════════════════════════
 elif page == "About":
     st.markdown('<p class="section-title">About CarPriceIQ</p>', unsafe_allow_html=True)
@@ -934,8 +883,9 @@ elif page == "About":
         <div class="info-panel">
           <h3>Dataset</h3>
           <p style="margin:0;color:var(--ink-soft);line-height:1.55">
-            Built on the CarDekho used-cars dataset with 302 records covering brand, year,
-            showroom price, kilometres driven, fuel type, seller type, transmission, and ownership.
+            Built on the used-cars dataset with 3,627 records (after outlier removal) covering
+            53 brands, model years 1992–2024, showroom price, kilometres driven, fuel type,
+            transmission, and ownership.
           </p>
         </div>
         """, unsafe_allow_html=True)
@@ -959,8 +909,8 @@ elif page == "About":
         """, unsafe_allow_html=True)
         st.dataframe(
             pd.DataFrame([
-                {"Task": "Regression", "Model": "Random Forest", "Score": "R² = 0.91"},
-                {"Task": "Classification", "Model": "Decision Tree", "Score": "Accuracy = 91.1%"},
+                {"Task": "Regression",      "Model": "Polynomial Regression (deg=2)", "Score": "R² = 0.9999"},
+                {"Task": "Classification",  "Model": "Decision Tree",                  "Score": "Accuracy = 99.45%"},
             ]),
             use_container_width=True,
             hide_index=True,
@@ -970,10 +920,10 @@ elif page == "About":
         st.markdown("""
         <div class="info-panel">
           <h3>Limitations</h3>
-          <div class="warn">Small dataset — rare brands or unusual configurations can be less reliable.</div>
+          <div class="warn">Rare brands or unusual configurations may be less reliable.</div>
           <div class="warn">Showroom price is a strong predictor and should be entered carefully.</div>
           <div class="warn">Car age is computed relative to 2024; retrain periodically for later use.</div>
-          <div class="warn">Trained primarily for the Indian used-car market context.</div>
+          <div class="warn">Dataset covers primarily the US used-car market context.</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -986,4 +936,4 @@ elif page == "About":
         </div>
         """, unsafe_allow_html=True)
 
-    st.caption("CarPriceIQ · Machine Learning project · Dataset: CarDekho")
+    st.caption("CarPriceIQ · Machine Learning project · Dataset: used_cars.csv")
