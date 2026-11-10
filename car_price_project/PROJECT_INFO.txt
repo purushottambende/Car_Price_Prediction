@@ -20,11 +20,11 @@ estimate along with a deal rating.
 --------------------------------------------------------------------------------
 3. PROBLEM STATEMENT
 --------------------------------------------------------------------------------
-The used car market in India is large and unorganized. Buyers and sellers often
-struggle to determine a fair price for a second-hand vehicle. This project aims
-to solve that by training ML models on historical car sale data to predict the
-expected selling price and classify whether a car falls in the Low, Medium, or
-High price range, helping users make informed decisions.
+The used car market is large and unorganized. Buyers and sellers often struggle
+to determine a fair price for a second-hand vehicle. This project aims to solve
+that by training ML models on historical car sale data to predict the expected
+selling price and classify whether a car falls in the Low, Medium, or High price
+range, helping users make informed decisions.
 
 --------------------------------------------------------------------------------
 4. OBJECTIVES
@@ -38,35 +38,44 @@ High price range, helping users make informed decisions.
 --------------------------------------------------------------------------------
 5. DATASET INFORMATION
 --------------------------------------------------------------------------------
-Name        : CarDekho Used Cars Dataset
-Source      : CarDekho.com (publicly available on Kaggle)
-Records     : 302 rows
-Features    : 9 columns
+Name        : Used Cars Dataset
+File        : used_cars.csv (transformed to car_data_new.csv for training)
+Records     : 4,009 raw rows -> 3,627 after outlier removal
+Features    : 9 columns (after transformation)
 
 Columns:
-  - Car_Name       : Name/model of the car (string)
-  - Year           : Year of manufacture (integer)
-  - Selling_Price  : Price the car was sold at in Lakhs INR (float) -- TARGET
-  - Present_Price  : Current ex-showroom price in Lakhs INR (float)
+  - Car_Name       : Brand + model name of the car (string)
+  - Year           : Year of manufacture, 1992-2024 (integer)
+  - Selling_Price  : Selling price in Lakhs INR (float) -- TARGET
+  - Present_Price  : Current showroom price in Lakhs INR (float)
   - Kms_Driven     : Total kilometres driven (integer)
-  - Fuel_Type      : Petrol / Diesel / CNG (categorical)
-  - Seller_Type    : Dealer / Individual (categorical)
+  - Fuel_Type      : Petrol / Diesel / Electric (categorical)
+  - Seller_Type    : Dealer (categorical)
   - Transmission   : Manual / Automatic (categorical)
-  - Owner          : Number of previous owners (integer)
+  - Owner          : Number of previous owners, 0 or 1 (integer)
+
+Unique brands : 53
 
 --------------------------------------------------------------------------------
 6. DATA PREPROCESSING
 --------------------------------------------------------------------------------
 Steps performed:
-  1. Converted numeric columns to proper dtype using regex extraction.
-  2. Imputed missing values:
+  1. Converted used_cars.csv (12-column raw format) to compatible 9-column
+     format using transform_used_cars.py:
+       - Combined brand + model -> Car_Name
+       - Cleaned price ("$10,300" -> Lakhs INR)
+       - Cleaned mileage ("51,000 mi." -> km)
+       - Standardised fuel types (Gasoline -> Petrol, etc.)
+       - Estimated Present_Price based on age ratio
+  2. Coerced numeric columns to proper dtype using regex extraction.
+  3. Imputed missing values:
        - Numeric columns  -> median
        - Categorical cols -> mode
-  3. Dropped rows where target (Selling_Price) was missing.
-  4. Removed outliers using IQR method on Selling_Price, Kms_Driven,
+  4. Dropped rows where target (Selling_Price) was missing.
+  5. Removed outliers using IQR method on Selling_Price, Kms_Driven,
      and Present_Price columns.
-     -> Rows reduced from 301 to 276 after outlier removal.
-  5. Created price categories for classification target using pd.qcut (3 bins):
+     -> Rows reduced from 4,008 to 3,627 after outlier removal.
+  6. Created price categories for classification target using pd.qcut (3 bins):
        - Low    : bottom 33%
        - Medium : middle 33%
        - High   : top 33%
@@ -77,9 +86,9 @@ Steps performed:
 Two new features were derived inside the sklearn Pipeline:
 
   - Brand       : Extracted from the first word of Car_Name
-                  (e.g., "maruti swift" -> "Maruti")
+                  (e.g., "Toyota Camry" -> "Toyota")
   - Car_Age     : CURRENT_YEAR (2024) - Year
-                  (e.g., manufactured in 2018 -> Car_Age = 6)
+                  (e.g., manufactured in 2020 -> Car_Age = 4)
   - Km_Per_Year : Kms_Driven / Car_Age
                   (average kilometres driven per year)
 
@@ -108,58 +117,78 @@ Categorical feats : Brand, Fuel_Type, Seller_Type, Transmission
 Train/Test Split  : 80% train, 20% test, random_state = 42
 
 --------------------------------------------------------------------------------
-9. MODELS IMPLEMENTED
+9. ALGORITHMS EVALUATED
 --------------------------------------------------------------------------------
 
 REGRESSION (predicting Selling_Price in Lakhs INR):
-  1. Multiple Linear Regression
-  2. Ridge Regression         (best alpha selected from [0.01, 0.1, 1, 10, 100])
-  3. Lasso Regression         (best alpha selected from [0.01, 0.1, 1, 10, 100])
-  4. Random Forest Regressor  (n_estimators=100, max_depth=10)
+  1. Simple Linear Regression
+  2. Multiple Linear Regression
+  3. Polynomial Regression (degree 2)   <-- BEST
+  4. Ridge Regression         (alpha selected from [0.01, 0.1, 1, 10, 100])
+  5. Lasso Regression         (alpha selected from [0.01, 0.1, 1, 10, 100])
+  6. ElasticNet Regression
+  7. Random Forest Regressor  (n_estimators=100, max_depth=10)
 
 CLASSIFICATION (predicting Low / Medium / High):
   1. Logistic Regression
   2. K-Nearest Neighbours     (k=5)
-  3. Decision Tree            (max_depth=8)
+  3. Decision Tree            (max_depth=8)   <-- BEST
   4. Random Forest Classifier (n_estimators=100, max_depth=10)
   5. Support Vector Machine   (kernel=RBF)
+  6. Gaussian Naive Bayes
 
 --------------------------------------------------------------------------------
 10. MODEL EVALUATION RESULTS
 --------------------------------------------------------------------------------
 
 REGRESSION RESULTS:
-  Metric used for selection: R² Score (Test) and 5-Fold Cross-Validation R²
+  Metric used for selection: R2 Score (Test) and 5-Fold Cross-Validation R2
 
-  Model                  MAE     RMSE    R²      CV R²
-  ---------------------  ------  ------  ------  ------
-  Multiple Linear        0.764   1.090   0.863   0.915
-  Ridge (alpha=1)        0.759   1.050   0.872   0.931
-  Lasso (alpha=0.01)     0.768   1.048   0.873   0.925
-  Random Forest  *BEST*  0.445   0.870   0.912   0.946
+  Model                       MAE     RMSE    R2      CV R2
+  --------------------------  ------  ------  ------  ------
+  Simple Linear (Year)        0.7435  1.1182  0.9952  0.9949
+  Multiple Linear             0.7435  1.1182  0.9952  0.9949
+  Polynomial (deg=2)  *BEST*  0.0943  0.1978  0.9999  0.9999
+  Ridge (alpha=0.1)           0.7429  1.1172  0.9953  0.9949
+  Lasso (alpha=0.01)          0.7557  1.1448  0.9950  0.9947
+  ElasticNet                  1.1338  1.6711  0.9894  0.9890
+  Random Forest               0.2024  0.5124  0.9990  0.9990
 
-  Best Model : Random Forest Regressor
-  Best R²    : 0.9125 (Test), 0.9464 (5-Fold CV)
-  Best MAE   : 0.445 Lakhs INR
+  Best Model : Polynomial Regression (degree 2)
+  Best R2    : 0.9999 (Test), 0.9999 (5-Fold CV)
+  Best MAE   : 0.0943 Lakhs INR
 
 CLASSIFICATION RESULTS:
   Metric used for selection: Macro F1 Score
 
   Model                  Accuracy  Macro F1  ROC-AUC
   ---------------------  --------  --------  -------
-  Logistic Regression    0.875     0.873     0.969
-  KNN (k=5)              0.839     0.834     0.951
-  Decision Tree  *BEST*  0.911     0.909     0.933
-  Random Forest          0.857     0.852     0.960
-  SVM (RBF)              0.857     0.853     0.953
+  Logistic Regression    98.21%    0.9820    0.9993
+  KNN (k=5)              82.92%    0.8281    0.9431
+  Decision Tree  *BEST*  99.45%    0.9944    0.9969
+  Random Forest          96.83%    0.9682    0.9972
+  SVM (RBF)              95.18%    0.9512    0.9965
+  Gaussian NB            58.13%    0.4996    0.8411
 
   Best Model   : Decision Tree Classifier
-  Accuracy     : 91.1%
-  Macro F1     : 0.909
-  ROC-AUC(OVR) : 0.933
+  Accuracy     : 99.45%
+  Macro F1     : 0.9944
+  ROC-AUC(OVR) : 0.9969
 
 --------------------------------------------------------------------------------
-11. WEB APPLICATION FEATURES
+11. FINAL MODELS SAVED
+--------------------------------------------------------------------------------
+After evaluating all algorithms, only the best-performing models were saved:
+
+  Regression     : Polynomial Regression (degree 2)
+  Classification : Decision Tree
+
+Both saved as sklearn Pipelines in models/ folder so the full preprocessing
+chain (BrandExtractor -> CarAgeFeatureEngineer -> ColumnTransformer -> Model)
+runs automatically on any new input.
+
+--------------------------------------------------------------------------------
+12. WEB APPLICATION FEATURES
 --------------------------------------------------------------------------------
 Framework : Streamlit
 File      : app.py
@@ -167,7 +196,7 @@ File      : app.py
 Features:
   - Sidebar form with all car input fields (Brand, Year, Showroom Price,
     Kms Driven, Fuel Type, Seller Type, Transmission, Owners)
-  - Car Summary table showing all inputs before prediction
+  - Vehicle Snapshot summary showing all inputs before prediction
   - Predict button that runs both models simultaneously
   - Estimated Market Price displayed in Indian Rupee format
   - Price Category badge (Low / Medium / High) with color coding
@@ -179,23 +208,25 @@ Features:
   - About tab with dataset details, methodology and model results
 
 --------------------------------------------------------------------------------
-12. PROJECT STRUCTURE
+13. PROJECT STRUCTURE
 --------------------------------------------------------------------------------
 car_price_project/
-  |-- app.py                  Web application (Streamlit)
-  |-- train_models.py         Model training script
-  |-- requirements.txt        Python dependencies
-  |-- README.md               Project documentation
+  |-- app.py                      Web application (Streamlit)
+  |-- train_models.py             Model training script
+  |-- transform_used_cars.py      Dataset transformation script
+  |-- requirements.txt            Python dependencies
+  |-- README.md                   Project documentation
   |-- data/
-  |     car_data.csv          Raw dataset
+  |     used_cars.csv             Raw dataset (4009 rows)
+  |     car_data_new.csv          Transformed dataset ready for training
   |-- src/
   |     __init__.py
-  |     preprocessing.py      Custom sklearn transformers
+  |     preprocessing.py          Custom sklearn transformers
   |-- models/
-  |     regressor.joblib      Saved regression pipeline
-  |     classifier.joblib     Saved classification pipeline
-  |     metadata.json         Dropdown options and model metadata
-  |-- assets/                 EDA and evaluation plots (PNG)
+  |     regressor.joblib          Saved Polynomial Regression pipeline
+  |     classifier.joblib         Saved Decision Tree pipeline
+  |     metadata.json             Dropdown options and model metadata
+  |-- assets/                     EDA and evaluation plots (PNG)
   |     price_distribution.png
   |     price_vs_year_kms.png
   |     avg_price_by_brand.png
@@ -207,10 +238,10 @@ car_price_project/
   |     roc_curves.png
   |     classification_comparison.png
   |-- notebooks/
-        car_price.ipynb       Exploratory analysis notebook
+        car_price.ipynb           Exploratory analysis notebook
 
 --------------------------------------------------------------------------------
-13. TECHNOLOGIES AND LIBRARIES
+14. TECHNOLOGIES AND LIBRARIES
 --------------------------------------------------------------------------------
 Language    : Python 3.10+
 Libraries   :
@@ -223,30 +254,34 @@ Libraries   :
   - joblib       1.4.2    Model serialization (save/load)
 
 --------------------------------------------------------------------------------
-14. HOW TO RUN THE PROJECT
+15. HOW TO RUN THE PROJECT
 --------------------------------------------------------------------------------
 Step 1: Install dependencies
         pip install -r requirements.txt
 
-Step 2: Train the models
+Step 2: Transform the new dataset
+        python transform_used_cars.py
+        (Converts used_cars.csv -> car_data_new.csv)
+
+Step 3: Train the models
         python train_models.py
         (This generates models/ folder and all plots in assets/)
 
-Step 3: Launch the web app
+Step 4: Launch the web app
         streamlit run app.py
         (Opens at http://localhost:8501)
 
 --------------------------------------------------------------------------------
-15. LIMITATIONS
+16. LIMITATIONS
 --------------------------------------------------------------------------------
-- Small dataset (302 rows): predictions for rare brands may be unreliable.
-- Present_Price is the strongest predictor; not always available in real life.
+- Showroom price (Present_Price) is a strong predictor; not always available
+  in real life.
 - Car_Age is computed relative to a fixed year (2024); will need updating later.
-- Trained only on Indian market data; not suitable for other regions.
+- Dataset covers primarily the US used-car market; may not reflect Indian prices.
 - No real-time data; prices may not reflect current market conditions.
 
 --------------------------------------------------------------------------------
-16. FUTURE SCOPE
+17. FUTURE SCOPE
 --------------------------------------------------------------------------------
 - Collect more data from multiple sources to improve model accuracy.
 - Add car condition (excellent / good / fair / poor) as a feature.
@@ -256,14 +291,15 @@ Step 3: Launch the web app
 - Add user authentication to save prediction history.
 
 --------------------------------------------------------------------------------
-17. CONCLUSION
+18. CONCLUSION
 --------------------------------------------------------------------------------
-The project successfully demonstrates the application of machine learning for
-a real-world regression and classification problem. Among all regression models,
-Random Forest achieved the best R² of 0.91, and among classifiers, Decision Tree
-achieved the highest accuracy of 91.1%. The Streamlit web app makes the models
-accessible without any coding knowledge, providing instant price estimates and
-deal ratings to users.
+This project successfully demonstrates the application of machine learning for
+a real-world regression and classification problem. Seven regression algorithms
+and six classification algorithms were evaluated. Among all regression models,
+Polynomial Regression (degree 2) achieved the best R2 of 0.9999. Among all
+classifiers, Decision Tree achieved the highest accuracy of 99.45% and F1 of
+0.9944. The Streamlit web app makes the models accessible without any coding
+knowledge, providing instant price estimates and deal ratings to users.
 
 ================================================================================
 END OF DOCUMENT
