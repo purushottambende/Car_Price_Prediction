@@ -65,7 +65,7 @@ The project uses the `used_cars.csv` dataset which is transformed into `car_data
 
 ### Regression — Polynomial Regression (degree 2)
 
-Chosen because car price has a non-linear relationship with age and mileage. A degree-2 polynomial captures this curve far better than a straight line.
+Chosen because car price has a non-linear relationship with age and mileage. A degree-2 polynomial captures this curve far better than a straight line..
 
 | Metric | Value |
 |---|---|
@@ -78,7 +78,7 @@ Chosen because car price has a non-linear relationship with age and mileage. A d
 
 Chosen because price categories (Low / Medium / High) have clear threshold boundaries in the data — exactly what decision trees are built to find.
 
-| Metric | Value |
+| Metric | Value | 
 |---|---|
 | Accuracy | **99.45%** |
 | Macro Precision | 0.9944 |
@@ -120,14 +120,14 @@ The app will open at `http://localhost:8501`.
 
 ---
 
-## Deploy on Streamlit Community Cloud
+## Deploy on Streamlit Community Cloud.
 
 1. Push the project to a **public GitHub repository** (include the `models/` and `assets/` folders).
 2. Go to [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
 3. Click **New app** → select your repo → set:
    - **Main file path:** `car_price_project/app.py`
    - **Branch:** `main`
-4. Click **Deploy**.
+4. Click **Deploy**....
 
 ---
 
