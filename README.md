@@ -17,7 +17,7 @@ A machine-learning course project that predicts the **selling price** of used ca
 ## Project Structure
 
 ```
-car_price_project/
+car_price_project
 ├── data/
 │   ├── used_cars.csv             # Raw dataset (4009 rows, 12 columns)
 │   └── car_data_new.csv          # Transformed dataset ready for training
