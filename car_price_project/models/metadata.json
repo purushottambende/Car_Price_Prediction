@@ -111,22 +111,103 @@
   },
   "regression_results": [
     {
-      "model": "Polynomial Regression (deg=2)",
+      "Model": "Simple Linear Regression",
+      "MAE": 0.7435,
+      "RMSE": 1.1182,
+      "R2": 0.9952,
+      "CV_R2": 0.9949
+    },
+    {
+      "Model": "Multiple Linear Regression",
+      "MAE": 0.7435,
+      "RMSE": 1.1182,
+      "R2": 0.9952,
+      "CV_R2": 0.9949
+    },
+    {
+      "Model": "Polynomial Regression (deg=2)",
       "MAE": 0.0943,
-      "MSE": 0.0391,
       "RMSE": 0.1978,
       "R2": 0.9999,
       "CV_R2": 0.9999
+    },
+    {
+      "Model": "Ridge (alpha=0.1)",
+      "MAE": 0.7429,
+      "RMSE": 1.1172,
+      "R2": 0.9953,
+      "CV_R2": 0.9949
+    },
+    {
+      "Model": "Lasso (alpha=0.01)",
+      "MAE": 0.7557,
+      "RMSE": 1.1448,
+      "R2": 0.995,
+      "CV_R2": 0.9947
+    },
+    {
+      "Model": "ElasticNet",
+      "MAE": 1.1338,
+      "RMSE": 1.6711,
+      "R2": 0.9894,
+      "CV_R2": 0.989
+    },
+    {
+      "Model": "Random Forest Regressor",
+      "MAE": 0.2024,
+      "RMSE": 0.5124,
+      "R2": 0.999,
+      "CV_R2": 0.999
     }
   ],
   "classification_results": [
     {
-      "model": "Decision Tree",
+      "Model": "Logistic Regression",
+      "Accuracy": 0.9821,
+      "Precision": 0.9819,
+      "Recall": 0.9822,
+      "F1": 0.982,
+      "ROC_AUC": 0.9993
+    },
+    {
+      "Model": "KNN (k=5)",
+      "Accuracy": 0.8292,
+      "Precision": 0.8287,
+      "Recall": 0.8281,
+      "F1": 0.8281,
+      "ROC_AUC": 0.9431
+    },
+    {
+      "Model": "Decision Tree",
       "Accuracy": 0.9945,
-      "Macro_Precision": 0.9944,
-      "Macro_Recall": 0.9946,
-      "Macro_F1": 0.9944,
+      "Precision": 0.9944,
+      "Recall": 0.9946,
+      "F1": 0.9944,
       "ROC_AUC": 0.9969
+    },
+    {
+      "Model": "Random Forest Clf",
+      "Accuracy": 0.9683,
+      "Precision": 0.9683,
+      "Recall": 0.9685,
+      "F1": 0.9682,
+      "ROC_AUC": 0.9972
+    },
+    {
+      "Model": "SVM (RBF)",
+      "Accuracy": 0.9518,
+      "Precision": 0.9515,
+      "Recall": 0.9514,
+      "F1": 0.9512,
+      "ROC_AUC": 0.9965
+    },
+    {
+      "Model": "Gaussian Naive Bayes",
+      "Accuracy": 0.5813,
+      "Precision": 0.5936,
+      "Recall": 0.5696,
+      "F1": 0.4996,
+      "ROC_AUC": 0.8411
     }
   ],
   "best_regressor": "Polynomial Regression (deg=2)",
