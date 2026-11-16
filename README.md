@@ -14,7 +14,7 @@ A machine-learning course project that predicts the **selling price** of used ca
 
 ---
 
-## Project Structure
+## Project Structure.
 
 ```
 car_price_project/
