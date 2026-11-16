@@ -8,7 +8,7 @@ A machine-learning course project that predicts the **selling price** of used ca
 
 1. User fills in car details (brand, year, kms driven, fuel type, etc.) in the sidebar.
 2. The input passes through a preprocessing pipeline that extracts the brand, computes car age, and encodes categorical features.
-3. A trained **Polynomial Regression (degree 2)** model predicts the estimated selling price.
+3. A trained **Polynomial Regression** model predicts the estimated selling price.
 4. A trained **Decision Tree** classifier assigns a price category (Low / Medium / High).
 5. If the user provides an asking price, a deal rating (Good Deal / Fair Deal / Overpriced) is shown based on how far it is from the predicted price.
 
